@@ -4,32 +4,32 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: '3D Scene Browser',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Load and explore 3D virtual worlds from web URLs. DDDBrowser renders
+        interactive 3D environments with models, lighting, and effects in real-time.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Lua/Luau Scripting',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Create interactive behaviors with Lua/Luau scripts. Add animations, interactions,
+        and game logic to bring your scenes to life.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Portal Travel',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Connect scenes together with portals. Travel seamlessly between different
+        virtual worlds and create interconnected experiences.
       </>
     ),
   },
