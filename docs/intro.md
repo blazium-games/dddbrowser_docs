@@ -2,46 +2,113 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Introduction to DDDBrowser
 
-Let's discover **Docusaurus in less than 5 minutes**.
+DDDBrowser is a 3D scene browser that allows you to explore and interact with virtual worlds loaded from web URLs. It supports rich 3D scenes with models, lighting, audio, scripting, and portals that connect different scenes together.
 
-## Getting Started
+## What is DDDBrowser?
 
-Get started by **creating a new site**.
+DDDBrowser is a desktop application that:
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+- **Loads 3D scenes** from HTTPS URLs
+- **Renders interactive 3D environments** with models, lights, and effects
+- **Supports scripting** with Lua/Luau for interactive behaviors
+- **Enables travel** between scenes via portals
+- **Provides a first-person** navigation experience
 
-### What you'll need
+Think of it as a browser for 3D virtual worlds - similar to how a web browser loads HTML pages, DDDBrowser loads 3D scene definitions and renders them in real-time.
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+## Key Concepts
 
-## Generate a new site
+### Scenes
 
-Generate a new Docusaurus site using the **classic template**.
+A **scene** is a JSON definition that describes a 3D environment. Scenes contain:
+- **Assets**: Models, textures, materials, scripts, fonts, and audio files
+- **Instances**: Placed objects in the 3D world (models, lights, portals, etc.)
+- **Metadata**: Information about the scene (name, author, rating, thumbnail)
 
-The classic template will automatically be added to your project after you run the command:
+Scenes are discovered from HTML pages using:
+1. `<script>` tags with scene JSON
+2. `<meta>` tags with scene metadata
+3. HTTP headers with scene information
 
-```bash
-npm init docusaurus@latest my-website classic
-```
+### Instances
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+**Instances** are objects placed in the 3D world. Each instance has:
+- **Position**: Where it appears (x, y, z coordinates)
+- **Rotation**: How it's oriented (Euler angles in degrees)
+- **Scale**: How large it is (x, y, z scale factors)
+- **Type**: What kind of object it is (model, light, portal, etc.)
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+### Assets
 
-## Start your site
+**Assets** are resources used by the scene:
+- **Models**: 3D geometry (OBJ/MTL format)
+- **Textures**: Images (PNG, JPG, JPEG, TGA)
+- **Materials**: Material definitions (MTL files)
+- **Scripts**: Lua/Luau code for interactivity
+- **Fonts**: TrueType fonts (TTF)
+- **Audio**: Sound files (WAV)
 
-Run the development server:
+### Portals
 
-```bash
-cd my-website
-npm run start
-```
+**Portals** are special instances that allow you to travel between scenes. When you interact with a portal, DDDBrowser loads the destination scene URL.
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+### Worlds
 
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+**Worlds** are collections of scenes that share the same coordinate space. Scenes can specify a world ID and position, allowing multiple scenes to exist in the same virtual world.
 
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+## Supported Formats
+
+DDDBrowser supports the following file formats:
+
+- **Models**: OBJ (geometry) and MTL (materials)
+- **Textures**: PNG, JPG, JPEG, TGA
+- **Fonts**: TTF (TrueType)
+- **Audio**: WAV
+- **Scripts**: Luau (Lua 5.1 compatible)
+
+All assets must be served over **HTTPS** - HTTP is not supported for security reasons.
+
+## Scene Discovery
+
+DDDBrowser discovers scenes from HTML pages using a priority order:
+
+1. **`<script>` tag** (highest priority):
+   ```html
+   <script id="blazium-scene" type="application/vnd.blazium.scene+json">
+   {
+     "name": "My Scene",
+     "version": "1.0",
+     ...
+   }
+   </script>
+   ```
+
+2. **`<meta>` tag**:
+   ```html
+   <meta name="x-blazium-scene" content='{"name":"My Scene",...}'>
+   ```
+
+3. **HTTP header** (lowest priority):
+   ```
+   X-Blazium-Scene: {"name":"My Scene",...}
+   ```
+
+## What You Can Do
+
+With DDDBrowser, you can:
+
+- **Explore 3D worlds** loaded from web URLs
+- **Interact with objects** using scripts
+- **Travel between scenes** via portals
+- **Experience audio** and visual effects
+- **Customize controls** and settings
+- **Create your own scenes** using the scene format
+
+## Next Steps
+
+- [Get Started](/docs/getting-started) - Learn how to install and run DDDBrowser
+- [Scene Format](/docs/scene-format/intro) - Learn how to create scenes
+- [Lua/Luau API](/docs/luau/intro) - Learn how to script interactive behaviors
+- [Examples](/docs/examples/intro) - See example scenes
