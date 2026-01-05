@@ -1,6 +1,7 @@
 {
   "name": "dddbrowser-docs",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Documentation for DDDBrowser - A 3D Scene Browser for Interactive Virtual Worlds",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
