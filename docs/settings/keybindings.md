@@ -71,41 +71,19 @@ Each action can have multiple keybindings:
 
 | Action | Default | Description |
 |--------|---------|-------------|
-| `Interact` | E | Generic interact/use |
-| `ConfirmInteract` | Enter | Confirm/talk/menu interact |
-| `SpecialInteract` | F | Special interaction |
+| `Interact` | E | Interact / script `on_interact` |
+| `ConfirmInteract` | Enter | Confirm/talk/menu interact (`on_interact`) |
+| `SpecialInteract` | F | Special interact (same `on_interact` path) |
 
-### Combat Actions
+### Reserved (no browser gameplay)
 
-| Action | Default | Description |
-|--------|---------|-------------|
-| `PrimaryAttack` | (unbound) | Primary attack |
-| `Block` | (unbound) | Block/defend |
-| `Reload` | (unbound) | Reload weapon |
-| `ThrowItem` | (unbound) | Throw item |
-| `MeleeAttack` | (unbound) | Melee attack |
-| `DropItem` | (unbound) | Drop item |
-
-### Slot Actions
-
-| Action | Default | Description |
-|--------|---------|-------------|
-| `Slot1` | 1 | Quick slot 1 |
-| `Slot2` | 2 | Quick slot 2 |
-| `Slot3` | 3 | Quick slot 3 |
-| `Slot4` | 4 | Quick slot 4 |
-| `Slot5` | 5 | Quick slot 5 |
-| `Slot6` | 6 | Quick slot 6 |
-| `Slot7` | 7 | Quick slot 7 |
-| `Slot8` | 8 | Quick slot 8 |
-| `Slot9` | 9 | Quick slot 9 |
-| `Slot0` | 0 | Quick slot 0 |
+Combat/slot actions (`PrimaryAttack`, `Block`, `Reload`, `ThrowItem`, `MeleeAttack`, `DropItem`, `Slot0`–`Slot9`, weapon modes) may appear in the keybindings list but are not wired to gameplay systems in DDDBrowser.
 
 ### System Actions
 
 | Action | Default | Description |
 |--------|---------|-------------|
-| `TerminalToggle` | (unbound) | Toggle terminal/console |
+| `TerminalToggle` | (unbound) | Toggle terminal console (Luau when Active) |
 | `FullscreenToggle` | Alt+Enter | Toggle fullscreen |
 
 ## Keybindings Storage

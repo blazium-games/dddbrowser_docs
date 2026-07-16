@@ -145,8 +145,8 @@ Defaults to (-100, -100, -100) to (100, 100, 100) if not specified.
 #### `gameType` (string, optional)
 
 Player movement type. Must be one of:
-- `"FPS"` - First-person shooter style movement (default)
-- `"NONE"` - No player movement, view-only
+- `"FPS"` - Physics-driven first-person movement (default)
+- `"NONE"` - WASD fly-cam exploration (no FPS physics controller)
 
 ```json
 "gameType": "FPS"

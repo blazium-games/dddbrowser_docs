@@ -58,7 +58,7 @@ Once a scene is loaded, you can navigate using:
 
 The exact controls depend on the scene's `gameType` setting:
 - **FPS**: First-person shooter style movement
-- **NONE**: No player movement (for viewing only)
+- **NONE**: WASD fly-cam exploration (no FPS physics)
 
 ## Understanding the UI
 

@@ -23,11 +23,14 @@ When a scene has `"gameType": "FPS"`, you can move using:
 - **Z**: Prone (hold to go prone)
 - **Alt**: Slow move (hold to move slowly)
 
-### View-Only Mode (NONE gameType)
+### Free Look / Exploration (NONE gameType)
 
-When a scene has `"gameType": "NONE"`, player movement is disabled. You can still:
-- Look around with the mouse
+When a scene has `"gameType": "NONE"` (or no FPS controller), WASD fly-cam exploration is enabled:
+- **WASD**: Fly the camera through the scene
+- **Mouse**: Look around
 - Interact with objects (if scripts allow)
+
+Use `"gameType": "FPS"` when you want physics-driven grounded movement instead.
 
 ## Interaction Controls
 
@@ -53,25 +56,15 @@ DDDBrowser supports many input actions that can be bound to keys:
 - `SlowMove` - Move slowly
 
 ### Interaction Actions
-- `Interact` - Generic interact/use
-- `ConfirmInteract` - Confirm/talk/menu-style interact
-- `SpecialInteract` - Special interaction (F key)
-
-### Combat Actions
-- `PrimaryAttack` - Primary attack
-- `Block` - Block/defend
-- `Reload` - Reload weapon
-- `ThrowItem` - Throw item
-- `MeleeAttack` - Melee attack
-- `DropItem` - Drop item
-
-### Slot Actions
-- `Slot1` through `Slot9` - Quick slots 1-9
-- `Slot0` - Quick slot 0
+- `Interact` - Generic interact / `on_interact` (E)
+- `ConfirmInteract` - Confirm / talk / menu-style interact (Enter)
+- `SpecialInteract` - Special interact / same `on_interact` path (F)
 
 ### System Actions
-- `TerminalToggle` - Toggle terminal/console
+- `TerminalToggle` - Toggle in-app terminal/console (Luau eval when scene is Active)
 - `FullscreenToggle` - Toggle fullscreen (Alt+Enter)
+
+Reserved combat/inventory keybinding names (`PrimaryAttack`, `Reload`, slots, etc.) may appear in settings but have no gameplay systems in the browser runtime.
 
 ## Default Keybindings
 

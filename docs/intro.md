@@ -56,7 +56,7 @@ Scenes are discovered from HTML pages using:
 
 ### Worlds
 
-**Worlds** are collections of scenes that share the same coordinate space. Scenes can specify a world ID and position, allowing multiple scenes to exist in the same virtual world.
+**Worlds** are metadata on scenes (`worldId`, `worldPosition`) used for display and portal compatibility checks. DDDBrowser loads one scene at a time; seamless multi-scene worlds in a shared coordinate space are not implemented yet.
 
 ## Supported Formats
 

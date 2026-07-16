@@ -103,7 +103,7 @@ All lights support:
 - Color (RGB)
 - Intensity (brightness)
 - Shadows (directional lights)
-- Real-time updates via scripts
+- Configured in scene JSON (script light setters are not available)
 
 See [Lighting Examples](/docs/examples/lighting/directional-light) for usage.
 
@@ -117,14 +117,14 @@ Directional lights can cast shadows:
   - Shadow bias
   - Orthographic size
 - **Performance**: Higher resolution = better quality but slower
-- **Limitations**: Only directional lights cast shadows
+- **Shadows**: Directional (CSM), spot, and point (cubemap) lights can cast shadows when `shadowEnabled` is set
 
 ## Skyboxes
 
 Skyboxes provide environment mapping:
 
 - **Purpose**: Background environment (sky, space, etc.)
-- **Format**: Cubemap texture (6 faces or equirectangular)
+- **Format**: Equirectangular skybox texture (HDR/LDR image). Separate 6-face cubemap file lists are not supported.
 - **Rotation**: Optional rotation for animated skies
 - **Configuration**: Defined in scene JSON
 
@@ -215,10 +215,10 @@ Scenes can specify a game type:
 - **FPS**: First-person shooter style movement
   - Full movement controls
   - Jump, sprint, crouch, etc.
-- **NONE**: View-only mode
-  - No player movement
-  - Camera controls only
-  - For viewing/interacting only
+- **NONE**: Fly-cam exploration (no FPS physics controller)
+  - WASD free-look camera movement
+  - Mouse look
+  - Interact with objects / portals
 
 ## Next Steps
 
