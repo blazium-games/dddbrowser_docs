@@ -171,6 +171,7 @@ end
 ### Engine.httpRequest(options)
 
 Make an **async** HTTPS GET request. Synchronous HTTP is disabled; a `callback` is required.
+Script HTTP never inherits the downloader “Allow HTTP” or private-network flags; HTTPS-only and public hosts by default.
 
 ```lua
 Engine.httpRequest({

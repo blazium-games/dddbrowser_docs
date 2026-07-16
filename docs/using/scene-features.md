@@ -208,6 +208,10 @@ Movement bounds limit player movement:
 - **Default**: (-100, -100, -100) to (100, 100, 100)
 - **Use case**: Confined spaces, levels with boundaries
 
+## Occlusion culling
+
+When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer on the GPU and batch-tests mesh bounds with a compute shader (compact visibility readback only). There is no per-frame CPU depth download. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+
 ## Game Types
 
 Scenes can specify a game type:
