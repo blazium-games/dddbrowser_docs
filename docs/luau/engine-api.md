@@ -341,7 +341,7 @@ Engine.httpRequest({
 
 ### Engine.openTextBox(instanceId, title, text, buttons, checkboxes, callback)
 
-Open a textbox modal.
+Open a **modal** textbox overlay. This is unrelated to scene JSON `type: "textbox"` world billboards (see [UI Elements](/docs/using/ui-elements)).
 
 ```lua
 local success = Engine.openTextBox(

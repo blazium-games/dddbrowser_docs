@@ -153,7 +153,7 @@ Travel between scenes.
 
 ### Textbox Instances (`type: "textbox"`)
 
-Display text in the 3D world.
+Display text as a **3D world billboard**. This is not a modal dialog; modals use `Engine.openTextBox` from scripts (see [UI Elements](/docs/using/ui-elements)).
 
 ```json
 {

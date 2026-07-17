@@ -170,7 +170,7 @@ Audio files for sound effects and music.
 
 ### Textbox (`type: "textbox"`)
 
-Textbox asset definitions for displaying text.
+Textbox **asset** definitions for **world billboard** text (paired with a `type: "textbox"` instance). These do **not** open `Engine.openTextBox` modals—modals are script-only.
 
 ```json
 {

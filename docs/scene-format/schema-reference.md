@@ -140,7 +140,8 @@ Properties:
 - `min` (vec3, required): Minimum bounds
 - `max` (vec3, required): Maximum bounds
 
-Defaults to (-100, -100, -100) to (100, 100, 100) if not specified.
+**When omitted**, the runtime still clamps movement to approximately **±100 per axis**
+((-100,-100,-100)…(100,100,100)). Set explicit bounds for larger playable areas.
 
 #### `gameType` (string, optional)
 

@@ -8,13 +8,27 @@ This guide will help you get DDDBrowser up and running so you can start explorin
 
 ## Installation
 
-DDDBrowser is a **Windows** desktop application (x64). Linux/macOS are not supported for public releases.
+DDDBrowser is a **Windows 10/11 (x64)** desktop application. Linux/macOS are **not** supported for public releases.
 
-1. Download the latest Windows release (staged folder or zip) and the matching `SHA256SUMS.txt`
-2. Verify checksums, then extract/copy the `browser` payload to a folder of your choice
-3. Run `DDDBrowser.exe`
+### Release artifacts
+
+Release CI stages a Windows export tree such as:
+
+- `exports/DDDBrowser_Windows_Release/` (or a published zip of that tree)
+- Matching `SHA256SUMS.txt` beside the staged payload when published
+
+The repo `VERSION` file (currently `0.0.0.1`) is the product version stamp used by packaging/release metadata; prefer the release tag / artifact name from the download source over guessing.
+
+### Install steps
+
+1. Download the latest **Windows** release payload and the matching `SHA256SUMS.txt`
+2. Verify checksums (e.g. `Get-FileHash` on PowerShell / `sha256sum` on Unix tools) against `SHA256SUMS.txt`
+3. Extract/copy the browser payload to a folder of your choice
+4. Run `DDDBrowser.exe`
 
 Settings, cache, and logs live under `%LOCALAPPDATA%\DDDBrowser\` (telemetry, when enabled, under `%LOCALAPPDATA%\Blazium\logs\`). Default logs redact URL paths (scheme + host only).
+
+Building from source is optional for contributors; see the project README. Public users should install the Windows release artifacts above.
 
 ## Running the Application
 

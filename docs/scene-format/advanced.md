@@ -56,7 +56,9 @@ Movement bounds limit player movement to a specific area.
 - `min` (vec3, required): Minimum bounds (X, Y, Z)
 - `max` (vec3, required): Maximum bounds (X, Y, Z)
 
-**Default**: (-100, -100, -100) to (100, 100, 100) if not specified
+**Default when omitted**: movement is still clamped to approximately **±100 on each axis**
+(`min` = (-100, -100, -100), `max` = (100, 100, 100)). Large open worlds must set
+explicit `movementBounds` or players hit an invisible wall at ±100.
 
 **Use cases**:
 - Confined spaces

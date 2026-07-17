@@ -41,20 +41,24 @@ Examples are self-contained and can be loaded directly from their URLs.
 
 ### Running Locally
 
-To run examples locally:
+**Preferred:** serve examples over **local HTTPS** (mkcert, Caddy, etc.) and load
+`https://localhost:PORT/example-name.html`.
 
-1. **Serve the examples directory**:
+**Alternate:** plain HTTP works only after the client’s **Allow HTTP** confirmation
+(travel escape hatch). Script `Engine.httpRequest` does **not** inherit Allow HTTP.
+
+1. **Serve the examples directory** (HTTP example):
    ```bash
    # Using Python
    python -m http.server 8000
-   
+
    # Using Node.js
    npx http-server -p 8000
    ```
 
 2. **Load in DDDBrowser**:
-   - URL: `http://localhost:8000/example-name.html`
-   - Note: Prefer HTTPS (or Allow HTTP in the client for plain `http://` local servers)
+   - Prefer: `https://localhost:8000/example-name.html` (local HTTPS)
+   - Or: `http://localhost:8000/example-name.html` → accept **Allow HTTP** when prompted
 
 ## Example Categories
 

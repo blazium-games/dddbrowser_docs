@@ -171,7 +171,9 @@ Autosave volumes automatically save scene state:
 - **Purpose**: Persistent game state
 - **Trigger**: Player enters the volume
 - **Notification**: Optional on-screen notification
-- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), transforms for mutable scene instances, plus `entityVisibility` (hidden renderables) and `entityLights` (color/intensity/enabled/range and spot extras for **scene-authored and spawned** lights). Session-spawned audio restores loop/volume/autoPlay/ambient. Spawn ids (`lua_spawn_N`) advance the session counter on load so new spawns do not collide. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
+- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), transforms for mutable scene instances, plus `entityVisibility` (hidden renderables) and `entityLights` (color/intensity/enabled/range/**attenuation** and spot extras for **scene-authored and spawned** lights). Session-spawned audio restores loop/volume/autoPlay/ambient flags (not playback position). Spawn ids (`lua_spawn_N`) advance the session counter on load so new spawns do not collide.
+- **Intentional omissions (not a full world dump):** portals, volumes, physics velocities, scene-authored audio **playback position**/playing state, picturebox runtime frame/content overrides, world textbox billboard runtime mutations, and modal `openTextBox` UI session state. Design puzzles around script/`on_save` tables or lights/visibility when you need checkpoint fidelity.
+- On load, checkpoints **fail closed** if `sceneUrl` is missing or does not match the active scene URL (normalized).
 
 See [Scene Save Examples](/docs/examples/scene-save/scene-save-autosave-default) for usage.
 

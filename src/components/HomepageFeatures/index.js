@@ -28,8 +28,8 @@ const FeatureList = [
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Connect scenes together with portals. Travel seamlessly between different
-        virtual worlds and create interconnected experiences.
+        Connect scenes with portals. Confirm travel, then load the destination
+        scene (one scene at a time—not a continuous multi-world stream).
       </>
     ),
   },

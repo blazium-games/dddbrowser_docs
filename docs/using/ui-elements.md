@@ -90,20 +90,26 @@ Portals can be configured to:
 - Manual trigger (require interaction)
 - Script trigger (controlled by scripts)
 
-## Textbox Modal
+## Textboxes: world billboard vs modal (two different features)
 
-Textboxes display information and can collect input:
+DDDBrowser uses “textbox” for two unrelated surfaces. Do not conflate them.
 
-**Features**:
-- **Title**: Optional title text
-- **Content**: Main text content (supports newlines)
-- **Buttons**: Optional action buttons
-- **Checkboxes**: Optional checkboxes for preferences
-- **Callback**: Script callback when user interacts
+### World billboard textboxes (scene JSON)
 
-Textboxes are opened by:
-- Scripts calling `Engine.openTextBox()`
-- Textbox instances in the scene
+Instances with `type: "textbox"` are **3D billboards in the world**. They are authored via a textbox asset + instance and rendered by the scene textbox system. Placing a textbox instance does **not** open a modal.
+
+See [Scene Features — Textboxes](/docs/using/scene-features) and [Instances — Textbox](/docs/scene-format/instances).
+
+### Modal textboxes (script UI)
+
+Modal overlays are opened only by scripts:
+
+- `Engine.openTextBox()` / `Engine.closeTextBox()`
+- ImGui variants: `Engine.openImGuiTextBox()` / `Engine.closeImGuiTextBox()`
+
+**Features**: title, body text, buttons, checkboxes, optional Lua callback.
+
+See [Engine API — Textboxes](/docs/luau/engine-api).
 
 ## URL Modal
 
@@ -130,11 +136,9 @@ URL travel remains on the **top bar** URL field + Load.
 
 ## ImGui Textbox
 
-ImGui textboxes are lightweight text displays:
+Lightweight script overlay (still a **modal/overlay**, not a world billboard):
 
-- **Purpose**: Quick information display
 - **Opened by**: `Engine.openImGuiTextBox()`
-- **Features**: Similar to regular textbox but lighter weight
 - **Use case**: Temporary messages, debug info
 
 ## UI State Indicators
@@ -150,9 +154,9 @@ DDDBrowser shows visual indicators for:
 
 UI elements cannot be customized by users, but scenes can:
 
-- **Control textboxes**: Scripts can open/close textboxes
-- **Trigger modals**: Scripts can trigger various modals
-- **Display information**: Use textboxes to show scene-specific UI
+- **World labels**: Author `type: "textbox"` instances for in-world billboards
+- **Modal UI**: Scripts open/close `Engine.openTextBox` / ImGui textboxes
+- **Other modals**: Travel, portal, URL confirmation, Settings (Esc)
 
 ## Best Practices
 
