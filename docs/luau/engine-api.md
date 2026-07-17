@@ -103,6 +103,8 @@ Engine.setEntityPosition("lua_spawn_1", 0, 5, 0)
 
 **ID model**: Script components use numeric `self.entity`. Scene instances and `Engine.spawnEntity` use string instance ids. `getEntity*` / `destroyEntity` take instance ids; `setEntity*` accepts either form.
 
+**Ownership**: String instance ids are subject to session-global soft ownership. With a script caller, the id must be the caller's `assetId` or a session-spawned id. Without a script caller, only session-spawned ids are accepted. Rejected updates log a warning and do nothing (they do not throw).
+
 **Example**:
 ```lua
 function MyScript:on_update(dt)
@@ -493,7 +495,9 @@ local id = Engine.spawnEntity({
 
 ### Engine.destroyEntity(instanceId)
 
-Destroy a non-critical spawned/scene instance by instance id. Portals and volume instances are rejected.
+Destroy a non-critical instance by instance id.
+
+**Ownership (session-global soft ownership)**: The instance must be controllable — either the caller's script `assetId`, or an id created via `Engine.spawnEntity` in the current session (any script in the session may destroy session spawns). Calls with no script entity context may only destroy session-spawned ids. Portals, volumes, and the player are always rejected. Unauthorized calls return `false` (and log a warning); they do not throw.
 
 ## External URL Functions
 

@@ -124,7 +124,7 @@ Directional lights can cast shadows:
 Skyboxes provide environment mapping:
 
 - **Purpose**: Background environment (sky, space, etc.)
-- **Format**: Equirectangular skybox texture (HDR/LDR image). Separate 6-face cubemap file lists are not supported.
+- **Format**: Equirectangular skybox texture as an LDR image (**PNG / JPG / JPEG / TGA** only). HDR/EXR skyboxes are not supported. Separate 6-face cubemap file lists are not supported.
 - **Rotation**: Optional rotation for animated skies
 - **Configuration**: Defined in scene JSON
 

@@ -19,7 +19,8 @@ Skyboxes provide environment mapping for the scene background.
 
 **Properties**:
 - `uri` (string, required): URL to skybox texture
-  - Equirectangular image only (6-face cubemap file lists are not supported)
+  - Equirectangular LDR image only: `.png`, `.jpg`, `.jpeg`, or `.tga` (HDR/EXR not supported)
+  - 6-face cubemap file lists are not supported
   - Must be HTTPS
 - `rotation` (vec3, optional): Rotation in degrees for animated skies
 

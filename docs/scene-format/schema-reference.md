@@ -193,7 +193,7 @@ Skybox configuration for environment mapping.
 ```
 
 Properties:
-- `uri` (string, required): URL to skybox texture
+- `uri` (string, required): HTTPS URL to an equirectangular LDR skybox (`.png`, `.jpg`, `.jpeg`, or `.tga` only; HDR/EXR not supported)
 - `rotation` (vec3, optional): Rotation in degrees
 
 #### `autosaveNotification` (object, optional)
