@@ -101,6 +101,8 @@ All lights support:
 
 **Ambient when IBL is off:** a fixed shader fallback of approximately `vec3(0.03) * albedo * ao`—not author-configurable. Prefer a skybox/IBL path or explicit lights for mood control.
 
+**Material AO vs SSAO:** material occlusion textures (or `1.0`) write into the G-buffer AO channel. Optional **SSAO** (Settings → Graphics → SSAO) multiplies a screen-space contact-shadow factor into that channel before lighting. Toggle SSAO off on low-end GPUs.
+
 Scene-authored light props and entity visibility are restored from `scene_state` v2 (`entityLights`, `entityVisibility`) on reload.
 
 See [Lighting Examples](/docs/examples/lighting/directional-light) for usage.
@@ -216,13 +218,21 @@ When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer
 
 **Product stance:** HZB compute occlusion is the supported path. Classic OpenGL **hardware occlusion queries** are **not** shipped and remain deferred—authors should not expect query-object occlusion behavior.
 
+## Portal-graph culling
+
+In-scene portal planes also drive a **portal adjacency graph**: the camera enters portals it faces, then BFS follows linked openings (nearby portals on the destination side). Geometry on the opposite side of a portal is kept only when near a reachable opening. Guarantees:
+
+- Prefer showing occluded geometry over culling visible geometry (conservative).
+- Same half-space as the camera for all portals ⇒ visible.
+- Travel still unloads/reloads the destination scene (one-scene model).
+
 ## Shadows (draw path)
 
 Shadow maps use dedicated CSM / spot / point paths. **Multi-draw indirect (MDI)** may be used for some opaque geometry batches; the **shadow pass is not on the geometry MDI path** and is not planned as a required optimization for authors. Toggle Shadows in Settings for cost control.
 
 ## Asset streaming (textures / IBL)
 
-Texture uploads use a small **PBO ring** on the render thread; mipmap generation is deferred to a follow-up frame. Skybox equirectangular upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame. Mesh upload PBO expansion is a separate deferred polish item.
+Texture and **mesh** uploads use small **PBO rings** on the render thread (fenced reuse); mipmap generation is deferred to a follow-up frame. Skybox equirectangular/six-face upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame.
 
 ## Instanced mesh sync
 

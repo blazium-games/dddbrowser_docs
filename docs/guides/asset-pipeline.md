@@ -12,11 +12,11 @@ How to get content from a DCC tool into a loadable DDDBrowser scene.
 |------|--------|
 | Mesh | **OBJ** (+ separate **MTL**) |
 | Textures | PNG / JPG / JPEG / TGA (LDR) |
-| Audio | WAV (PCM) |
+| Audio | WAV (PCM) or Ogg Vorbis |
 | Scripts | Luau (`.luau`) |
 | Scene | JSON discovered from HTML |
 
-**Not supported:** glTF, GLB, FBX, USD, HDR **material** maps, EXR, compressed WAV. Skyboxes may use Radiance `.hdr` or six-face lists.
+**Not supported:** glTF, GLB, FBX, USD, HDR **material** maps, EXR, compressed WAV, MP3/Opus as product formats. Skyboxes may use Radiance `.hdr` or six-face lists.
 
 ## Recommended export flow
 
@@ -41,7 +41,7 @@ How to get content from a DCC tool into a loadable DDDBrowser scene.
 
 ## Audio tips
 
-- Export **PCM WAV** only; cap **32 MiB**.
+- SFX: export **PCM WAV** (cap **32 MiB**). Music beds: prefer **Ogg Vorbis** (cap **16 MiB**).
 - Use `audio.ambient` for non-spatial beds.
 
 ## Scripts

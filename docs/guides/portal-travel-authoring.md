@@ -12,6 +12,8 @@ DDDBrowser loads **exactly one** scene. Portal or URL travel **unloads** the cur
 
 `world.id` / `world.position` remain metadata + portal compatibility checks only. Do not author for continuous multi-scene adjacency or in-memory neighbor streaming.
 
+**In-scene cull:** portal openings form a small visibility graph (chained nearby portals). Place openings so rooms you intend to hide sit outside opening radii on the far side; do not rely on portal cull for gameplay secrecy.
+
 ## Trigger mutex
 
 Each portal must enable **exactly one** trigger mode:

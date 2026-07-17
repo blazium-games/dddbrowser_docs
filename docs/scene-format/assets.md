@@ -163,11 +163,14 @@ Audio files for sound effects and music.
 }
 ```
 
-**Supported formats**: WAV (`.wav` files), **PCM only** (compressed WAV is not supported)
-**Media types**: `audio/wav`
-**Limits**: Max WAV file size **32 MiB**
+**Supported formats**:
+- WAV (`.wav`) — **PCM only** (compressed WAV is not supported); max **32 MiB**
+- Ogg Vorbis (`.ogg`) — preferred for music beds; max **16 MiB**
+
+**Media types**: `audio/wav`, `audio/ogg` (or `application/ogg`)
+
 **Audio properties**:
-- `format` (string, required by schema): Must be `"wav"`
+- `format` (string, required by schema): `"wav"` or `"ogg"` (must match the file)
 - `ambient` (boolean, optional): Whether audio is ambient (constant volume)
 
 ### Textbox (`type: "textbox"`)
@@ -260,6 +263,7 @@ Inline data for textbox and picturebox assets:
 | Font (TTF) | `font/ttf` |
 | Font (OTF) | `font/otf` |
 | Audio (WAV) | `audio/wav` |
+| Audio (Ogg) | `audio/ogg` |
 | Textbox | `application/json` |
 | Picturebox | `application/json` |
 

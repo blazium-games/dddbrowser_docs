@@ -26,7 +26,7 @@ The repo `VERSION` file (currently `0.0.0.1`) is the product version stamp used 
 3. Extract/copy the browser payload to a folder of your choice
 4. Run `DDDBrowser.exe`
 
-Settings, cache, and logs live under `%LOCALAPPDATA%\DDDBrowser\` (telemetry, when enabled, under `%LOCALAPPDATA%\Blazium\logs\`). Default logs redact URL paths (scheme + host only).
+Settings, cache, **scene history** (`history.json`), and logs live under `%LOCALAPPDATA%\DDDBrowser\` (telemetry, when enabled, under `%LOCALAPPDATA%\Blazium\logs\`). History stores full scene URLs locally so you can reopen recent scenes from the top-bar **Recent** list; it is not a content catalog. Default logs redact URL paths (scheme + host only).
 
 Building from source is optional for contributors; see the project README. Public users should install the Windows release artifacts above.
 
@@ -38,6 +38,7 @@ After installation, launch DDDBrowser. You should see:
 - A **top bar** with:
   - URL input field
   - Load button
+  - **Recent** dropdown (local visit history)
   - Progress indicator
   - Leave Instance button
 

@@ -36,8 +36,9 @@ HDR material maps are not supported. Skyboxes may use Radiance `.hdr` (equirect 
 
 | Limit | Value |
 |-------|------:|
-| Format | WAV, **PCM only** |
-| Max file size | **32 MiB** |
+| Format | WAV (**PCM only**) or Ogg Vorbis |
+| Max WAV size | **32 MiB** |
+| Max Ogg size | **16 MiB** |
 
 ## Scripts
 
