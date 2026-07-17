@@ -26,6 +26,16 @@ The following Lua globals are **removed** (set to `nil`) before scripts run:
 
 Use `Engine`, `Scene`, `Gamemode`, and `localStorage` instead of OS/filesystem APIs. There is no `os.time()` — persist only your own script fields in `on_save`.
 
+### Runtime budgets
+
+| Limit | Default |
+|-------|---------|
+| VM heap | **64 MiB** (`script.execution.maxMemoryBytes`) |
+| Script source file | **1 MiB** |
+| Per-frame script budget | **~5 ms** (`script.execution.maxFrameTimeSeconds`) |
+
+Exceeding the heap or file size fails script load/execution; long frames are interrupted.
+
 ## Entity Scripts vs Gamemode Scripts
 
 DDDBrowser supports two types of scripts:

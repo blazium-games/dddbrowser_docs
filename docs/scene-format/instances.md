@@ -142,12 +142,14 @@ Travel between scenes.
     "radius": 3.0,
     "autoTrigger": false,
     "manualTrigger": true,
-    "scriptTrigger": true
+    "scriptTrigger": false
   }
 }
 ```
 
-**Required**: `portal` property with destination URL
+**Required**: `portal` property with destination URL.
+
+**Trigger mutex**: Exactly one of `autoTrigger`, `manualTrigger`, or `scriptTrigger` must be `true` (schema rejects zero or multiple).
 
 ### Textbox Instances (`type: "textbox"`)
 
@@ -348,9 +350,11 @@ Portal instances use the `portal` property:
 
 - `destinationUrl` (string, required): URL of destination scene
 - `radius` (number): Trigger radius (default: 0)
-- `autoTrigger` (boolean): Travel immediately on approach (default: false)
-- `manualTrigger` (boolean): Require interaction (default: true)
-- `scriptTrigger` (boolean): Allow script-triggered travel (default: true)
+- `autoTrigger` (boolean): Enter radius → shared travel preview / load path (default: **false**)
+- `manualTrigger` (boolean): Interact (raycast or nearby) → portal confirmation modal (default: **true**)
+- `scriptTrigger` (boolean): Interact → script `on_interact`; script calls `Engine.triggerPortal(id)` or `Scene.TravelTo(url)` (default: **false**)
+
+Exactly one trigger flag must be enabled. Defaults match the runtime (`manualTrigger` true, others false).
 
 ## Audio Properties
 

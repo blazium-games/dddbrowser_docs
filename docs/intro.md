@@ -47,7 +47,7 @@ Scenes are discovered from HTML pages using:
 - **Textures**: Images (PNG, JPG, JPEG, TGA)
 - **Materials**: Material definitions (MTL files)
 - **Scripts**: Lua/Luau code for interactivity
-- **Fonts**: TrueType fonts (TTF)
+- **Fonts**: TrueType / OpenType fonts (TTF, OTF)
 - **Audio**: Sound files (WAV)
 
 ### Portals
@@ -56,7 +56,7 @@ Scenes are discovered from HTML pages using:
 
 ### Worlds
 
-**Worlds** are metadata on scenes (`worldId`, `worldPosition`) used for display and portal compatibility checks. DDDBrowser loads one scene at a time; seamless multi-scene worlds in a shared coordinate space are not implemented yet.
+**Worlds** are metadata on scenes (`world.id`, `world.position` in scene JSON; exposed to scripts as `Scene.getWorldId()` / `Scene.getWorldPosition()`) used for display and portal compatibility checks. DDDBrowser loads one scene at a time; seamless multi-scene worlds in a shared coordinate space are not implemented yet.
 
 ## Supported Formats
 
@@ -64,7 +64,7 @@ DDDBrowser supports the following file formats:
 
 - **Models**: OBJ (geometry) and MTL (materials)
 - **Textures**: PNG, JPG, JPEG, TGA
-- **Fonts**: TTF (TrueType)
+- **Fonts**: TTF / OTF
 - **Audio**: WAV
 - **Scripts**: Luau (Lua 5.1 compatible)
 

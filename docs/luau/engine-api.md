@@ -262,9 +262,23 @@ Engine.setCamera({
 })
 ```
 
-Forces a one-shot camera sync on the render/player side (`forceCameraSync`). Forward is normalized; a zero-length forward is an error.
+Forces a one-shot camera sync on the render/player side (`forceCameraSync`), updates the player physics body, and resets FPS velocity. Forward is normalized; a zero-length forward is an error.
 
 **Returns**: None
+
+### Engine.triggerPortal(instanceId)
+
+Trigger travel for a portal instance by id (uses the portal's `destinationUrl` through the shared travel/preview path).
+
+```lua
+function MyPortalScript:on_interact(actorId)
+    Engine.triggerPortal(self.assetId)  -- or the portal instance id
+end
+```
+
+Used with portals that have `scriptTrigger: true` (exactly one trigger mode). Prefer this when the destination should come from the portal component; use `Scene.TravelTo(url)` when the script chooses a URL.
+
+**Returns**: `true` if the portal was found and travel was requested, otherwise `false`.
 
 ## Networking
 

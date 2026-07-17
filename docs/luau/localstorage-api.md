@@ -22,6 +22,18 @@ Data is stored in:
 - **Key**: MD5 hash of the base URL (scheme://host[:port])
 - **Scope**: All scenes from the same base URL share storage
 
+## Quotas
+
+| Limit | Value |
+|-------|-------|
+| Key size | **256 bytes** |
+| Value size | **64 KiB** |
+| Total payload | **1 MiB** |
+| Entry count | **512** |
+| On-disk file gate | **2 MiB** (before parse) |
+
+Writes that exceed these limits fail (return `false` / no-op).
+
 ## API Functions
 
 ### localStorage.get(key)

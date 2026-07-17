@@ -11,13 +11,12 @@ DDDBrowser supports a rich set of features that make scenes interactive and enga
 Portals allow you to travel between scenes:
 
 - **Purpose**: Connect different scenes together
-- **Trigger**: Interact with portal instance
-- **Configuration**: 
-  - Auto-trigger (travel immediately on approach)
-  - Manual trigger (require interaction)
-  - Script trigger (controlled by scripts)
+- **Trigger modes** (exactly one per portal):
+  - **Auto** (`autoTrigger`): enter radius → travel preview / load (same URL validation and HTTP prompt as other travel)
+  - **Manual** (`manualTrigger`): interact (look+click or nearby+interact) → portal confirmation modal
+  - **Script** (`scriptTrigger`): interact → entity `on_interact`; call `Engine.triggerPortal(instanceId)` or `Scene.TravelTo(url)`
 - **Validation**: Destination URL and world are validated
-- **Travel**: Loads destination scene when triggered
+- **Travel**: Loads destination scene when the player confirms (manual) or the script/auto path proceeds
 
 Portals can specify:
 - Destination URL
@@ -177,7 +176,7 @@ Autosave volumes automatically save scene state:
 - **Purpose**: Persistent game state
 - **Trigger**: Player enters the volume
 - **Notification**: Optional on-screen notification
-- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), and transforms for mutable scene instances. Session-spawned lights restore color/intensity/enabled/range (and spot direction/cutoffs); audio restores loop/volume/autoPlay. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
+- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), and transforms for mutable scene instances. Session-spawned lights restore color/intensity/enabled/range (and spot direction/cutoffs); audio restores loop/volume/autoPlay/ambient. Spawn ids (`lua_spawn_N`) advance the session counter on load so new spawns do not collide. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
 
 See [Scene Save Examples](/docs/examples/scene-save/scene-save-autosave-default) for usage.
 

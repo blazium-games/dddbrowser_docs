@@ -121,8 +121,8 @@ TrueType font files for text rendering.
 }
 ```
 
-**Supported formats**: TTF (`.ttf` files)
-**Media types**: `font/ttf`
+**Supported formats**: TTF (`.ttf`) and OTF (`.otf`)
+**Media types**: `font/ttf`, `font/otf`
 **Font properties**:
 - `size` (number, optional): Font size in pixels
 - `style` (string, optional): Font style - `"normal"`, `"bold"`, or `"italic"`
@@ -138,7 +138,6 @@ Audio files for sound effects and music.
   "uri": "https://example.com/sound.wav",
   "mediaType": "audio/wav",
   "audio": {
-    "format": "wav",
     "ambient": false
   }
 }
@@ -148,8 +147,7 @@ Audio files for sound effects and music.
 **Media types**: `audio/wav`
 **Limits**: Max WAV file size **32 MiB**
 **Audio properties**:
-- `format` (string, required): Audio format - currently only `"wav"`
-- `ambient` (boolean, optional): Whether audio is ambient (constant volume)
+- `ambient` (boolean, optional): Whether audio is ambient (constant volume). A `format` field is not read by the validator (WAV is implied by `mediaType` / extension).
 
 ### Textbox (`type: "textbox"`)
 
@@ -239,6 +237,7 @@ Inline data for textbox and picturebox assets:
 | Texture (TGA) | `image/tga` |
 | Script (Luau) | `application/x-luau` |
 | Font (TTF) | `font/ttf` |
+| Font (OTF) | `font/otf` |
 | Audio (WAV) | `audio/wav` |
 | Textbox | `application/json` |
 | Picturebox | `application/json` |
@@ -300,7 +299,6 @@ Collider types:
     "uri": "https://example.com/sound.wav",
     "mediaType": "audio/wav",
     "audio": {
-      "format": "wav",
       "ambient": false
     }
   }
