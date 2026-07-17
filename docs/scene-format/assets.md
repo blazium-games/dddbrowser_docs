@@ -47,7 +47,7 @@ All assets have this basic structure:
 
 ### Model (`type: "model"`)
 
-3D geometry files in OBJ format.
+3D geometry files in **OBJ format only**. glTF / GLB / FBX are **not** product loaders—export to OBJ + MTL for DDDBrowser.
 
 ```json
 {
@@ -62,9 +62,10 @@ All assets have this basic structure:
 **Media types**: `model/obj`
 **Materials**: Use separate material assets (MTL files)
 **Constraints**:
-- Triangle faces only (quads/ngons are skipped)
-- OBJ file size cap: **64 MiB**; MTL: **16 MiB**
+- Faces are **triangulated on load** by default (quads become triangles; prefer exporting triangles for predictable results)
+- OBJ file size cap: **64 MiB**; MTL: **16 MiB**; max line length **1 MiB**
 - Soft caps: ~2M vertices, ~8M indices, 8192 meshes / 4096 shapes / 4096 materials per OBJ
+- See [Asset budgets](/docs/scene-format/asset-budgets) and [Asset pipeline](/docs/guides/asset-pipeline)
 
 ### Material (`type: "material"`)
 
@@ -96,13 +97,14 @@ Image files used for textures.
 }
 ```
 
-**Supported formats**: PNG, JPG, JPEG, TGA (LDR only)
+**Supported formats**: PNG, JPG, JPEG, TGA (**LDR only** — no HDR/EXR/DDS/KTX product path)
 **Media types**: `image/png`, `image/jpeg`, `image/jpg`, `image/tga`
 **Usage**: Referenced by materials or pictureboxes
-**Limits** (rejected at load):
+**Limits** (rejected at load — see [Asset budgets](/docs/scene-format/asset-budgets)):
 - Max dimension: **8192** px on either side
 - Max total pixels: **4096×4096** (16,777,216)
 - Max file size: **64 MiB**
+- Skyboxes use the same LDR image set (equirectangular); six-face cubemap file lists are not supported
 
 ### Script (`type: "script"`)
 

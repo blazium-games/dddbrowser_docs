@@ -61,7 +61,9 @@ DDDBrowser supports many input actions that can be bound to keys:
 - `SpecialInteract` - Special interact / same `on_interact` path (F)
 
 ### System Actions
-- `TerminalToggle` - Toggle in-app terminal/console (Luau eval when scene is Active)
+- `TerminalToggle` - Toggle in-app terminal/console (Luau `evalConsole` when scene is Active)
+
+**Terminal / evalConsole footgun:** The console evaluates Luau with the full Engine API. Without a script entity caller, mutate/destroy only affects **console-owned** spawns (per-caller ownership). It is still powerful—treat it as a trusted debug tool, not a sandboxed guest script. Getters remain open-read (see [Engine API](/docs/luau/engine-api)).
 - `FullscreenToggle` - Toggle fullscreen (Alt+Enter)
 
 Reserved combat/inventory keybinding names (`PrimaryAttack`, `Reload`, slots, etc.) may appear in settings but have no gameplay systems in the browser runtime.

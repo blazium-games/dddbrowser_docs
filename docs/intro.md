@@ -60,15 +60,21 @@ Scenes are discovered from HTML pages using:
 
 ## Supported Formats
 
-DDDBrowser supports the following file formats:
+**Public product model path is OBJ + MTL only.** glTF/GLB is not supported as a scene asset format.
 
-- **Models**: OBJ (geometry) and MTL (materials)
-- **Textures**: PNG, JPG, JPEG, TGA
+DDDBrowser supports:
+
+- **Models**: OBJ (geometry) and MTL (materials) — permanent product path
+- **Textures**: PNG, JPG, JPEG, TGA (LDR)
 - **Fonts**: TTF / OTF
-- **Audio**: WAV
+- **Audio**: WAV (PCM)
 - **Scripts**: Luau (Lua 5.1 compatible)
 
 **HTTPS is the default and recommended** for scene and asset URLs. Plain `http://` travel/load is allowed only after an explicit **Allow HTTP** confirmation in the client (user-gated escape hatch). Script `Engine.httpRequest` is separate: it remains HTTPS-only and does **not** inherit the travel Allow HTTP flag.
+
+## Authoring stance
+
+Scenes are authored as **JSON + hosted assets** (no shipped Level Builder in the browser). Use the [Publish checklist](/docs/guides/publish-checklist) and [Asset pipeline](/docs/guides/asset-pipeline) guides. The separate Level Builder tool under `tools/level_editor/` is experimental and unsupported for public creators.
 
 ## Scene Discovery
 
@@ -108,7 +114,8 @@ With DDDBrowser, you can:
 
 ## Next Steps
 
-- [Get Started](/docs/getting-started) - Learn how to install and run DDDBrowser
-- [Scene Format](/docs/scene-format/intro) - Learn how to create scenes
-- [Lua/Luau API](/docs/luau/intro) - Learn how to script interactive behaviors
-- [Examples](/docs/examples/intro) - See example scenes
+- [Get Started](/docs/getting-started) - Install and run DDDBrowser
+- [Publish checklist](/docs/guides/publish-checklist) - Ship a production scene
+- [Scene Format](/docs/scene-format/intro) - Scene JSON reference
+- [Lua/Luau API](/docs/luau/intro) - Script interactive behaviors
+- [Examples](/docs/examples/intro) - Example scenes

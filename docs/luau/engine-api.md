@@ -248,6 +248,10 @@ Engine.setLightRange(lightId, 20.0)
 
 **Returns**: `boolean` - `true` if applied
 
+### Open-read / reconnaissance surface
+
+**Mutate/destroy** APIs are per-caller ownership-gated (see **Ownership** under setters / `destroyEntity`). **Getters and queries are not**: any script in the scene can typically read transforms, light properties, overlap/raycast results, and camera state for ids it can name. Do not assume sandbox isolation between untrusted multi-script scenes for observation—only for mutate/destroy and network/filesystem limits.
+
 ### Engine.getLightColor(instanceId) / getLightIntensity / getLightEnabled / getLightRange
 
 Read light properties. Unlike setters, getters are **not** ownership-gated (same open-read model as `getEntityPosition`). Returns `nil` / falsey when the id is missing or not a light.
@@ -518,6 +522,9 @@ Read transform for a scene instance id (string). Returns a `{x,y,z}` table or ni
 
 Spawn a runtime instance. Returns the new **instance id** string, or nil.
 
+**Supported types only:** `model`, `pointlight`, `spotlight`, `directionallight`, `audio`.  
+**Not spawnable at runtime:** portals, volumes, textbox/picturebox billboards, fonts, etc. Author those in scene JSON. Unsupported `type` values fail (nil) with a log warning.
+
 ```lua
 local id = Engine.spawnEntity({
     type = "model",           -- model | pointlight | spotlight | directionallight | audio
@@ -545,7 +552,7 @@ Destroy a non-critical instance by instance id.
 
 ### Engine.openExternalUrl(url, callback)
 
-Open an external URL in the browser (with user confirmation).
+Request opening an external URL in the **system browser** after user confirmation.
 
 ```lua
 local success = Engine.openExternalUrl(
@@ -561,12 +568,15 @@ local success = Engine.openExternalUrl(
 ```
 
 **Parameters**:
-- `url` (string, required): URL to open
+- `url` (string, required): `http://` or `https://` URL
 - `callback` (function, optional): Callback function(accepted)
 
-**Returns**: `boolean` - `true` if modal opened
+**Returns**: `boolean` - `true` if the confirm modal opened
 
-**Security**: User must confirm before URL is opened
+**Security / UX**:
+- Confirm dialog emphasizes the **host** (full URL secondary) and that you are leaving DDDBrowser
+- Private/reserved targets are rejected
+- Default application logs redact URL paths (`scheme://host/***`)
 
 **Example**:
 ```lua

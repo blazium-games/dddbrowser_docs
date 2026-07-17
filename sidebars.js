@@ -19,11 +19,24 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Author guides',
+      items: [
+        'guides/publish-checklist',
+        'guides/asset-pipeline',
+        'guides/portal-travel-authoring',
+        'guides/script-http-allowlist',
+        'guides/performance-budgets',
+        'guides/save-autosave-patterns',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Scene Format Reference',
       items: [
         'scene-format/intro',
         'scene-format/schema-reference',
         'scene-format/assets',
+        'scene-format/asset-budgets',
         'scene-format/instances',
         'scene-format/metadata',
         'scene-format/advanced',
@@ -52,6 +65,7 @@ const sidebars = {
           type: 'category',
           label: 'Basic Examples',
           items: [
+            'examples/basic/production-minimal',
             'examples/basic/scene-valid',
             'examples/basic/scene-single-entity',
             'examples/basic/scene-metadata-minimal',

@@ -112,12 +112,22 @@ The cache directory stores downloaded assets to speed up subsequent loads of the
 
 Default application logs redact `http(s)` URLs to `scheme://host/***`. Telemetry is **off by default**; when enabled, string payload fields are redacted the same way unless full-URL debug logging is explicitly enabled.
 
+## Authoring your own scenes
+
+Public authoring is **JSON-only**: hand-write (or generate) scene JSON, host OBJ/MTL/LDR/WAV/Luau over HTTPS, and point the URL bar at your discovery HTML.
+
+- [Publish checklist](/docs/guides/publish-checklist) — end-to-end ship steps
+- [Asset pipeline](/docs/guides/asset-pipeline) — DCC export to OBJ
+- [Production template](/docs/examples/basic/production-minimal) — copy-pasteable starter
+
+There is no finished Level Builder in the shipped browser. The separate `tools/level_editor` binary is experimental and unsupported.
+
 ## Next Steps
 
 Now that you have DDDBrowser running:
 
 - [Learn Navigation](/docs/using/navigation) - Master the controls
+- [Publish checklist](/docs/guides/publish-checklist) - Ship a scene
 - [Explore Scene Features](/docs/using/scene-features) - Understand what scenes can do
-- [Create Your Own Scene](/docs/scene-format/intro) - Build your first scene
 - [Try Examples](/docs/examples/intro) - See what's possible
 
