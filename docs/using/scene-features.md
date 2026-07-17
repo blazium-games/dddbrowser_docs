@@ -210,7 +210,15 @@ Movement bounds limit player movement:
 
 ## Occlusion culling
 
-When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer on the GPU and batch-tests mesh bounds with a compute shader (compact visibility readback only). There is no per-frame CPU depth download. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer on the GPU (from the previous frame’s depth) and batch-tests mesh bounds with a compute shader. Visibility results are applied with a **one-frame delay** (double-buffered SSBO readback) so the current frame does not stall on `glGetBufferSubData`. New or unknown candidates stay visible (conservative) until a delayed result arrives. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+
+## Asset streaming (textures / IBL)
+
+Texture uploads use a small **PBO ring** on the render thread; mipmap generation is deferred to a follow-up frame. Skybox equirectangular upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame.
+
+## Instanced mesh sync
+
+ECS → InstanceManager sync interns mesh cache keys (`MeshKeyId`) and tracks a per-mesh **entity-set fingerprint**. Transform-only updates patch instances in place; adding or removing entities remaps only the affected mesh batch (no global instance clear on set changes).
 
 ## Game Types
 
