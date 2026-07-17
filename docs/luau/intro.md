@@ -17,6 +17,15 @@ Luau is a scripting language that:
 
 Scripts in DDDBrowser are executed in a secure sandbox with access to engine APIs.
 
+### Sandbox restrictions
+
+The following Lua globals are **removed** (set to `nil`) before scripts run:
+
+- `os`, `io`, `debug`, `package`, `buffer`
+- `require`, `dofile`, `loadfile`, `load`, `loadstring`
+
+Use `Engine`, `Scene`, `Gamemode`, and `localStorage` instead of OS/filesystem APIs. There is no `os.time()` — persist only your own script fields in `on_save`.
+
 ## Entity Scripts vs Gamemode Scripts
 
 DDDBrowser supports two types of scripts:
