@@ -56,7 +56,9 @@ Scenes are discovered from HTML pages using:
 
 ### Worlds
 
-**Worlds** are metadata on scenes (`world.id`, `world.position` in scene JSON; exposed to scripts as `Scene.getWorldId()` / `Scene.getWorldPosition()`) used for display and portal compatibility checks. DDDBrowser loads one scene at a time; seamless multi-scene worlds in a shared coordinate space are not implemented yet.
+**Worlds** are metadata on scenes (`world.id`, `world.position` in scene JSON; exposed to scripts as `Scene.getWorldId()` / `Scene.getWorldPosition()`) used for display and portal compatibility checks.
+
+**Product model (permanent):** DDDBrowser loads **exactly one scene at a time**. Portal and URL travel **fully unload** the current scene and **load** the destination. There is no streamed worlds adjacency, shared-coordinate multi-scene space, or seamless handoff—design hubs and portals for confirm → reload.
 
 ## Supported Formats
 

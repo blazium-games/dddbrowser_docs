@@ -95,7 +95,11 @@ All lights support:
 - Color (RGB)
 - Intensity (brightness)
 - Shadows (directional lights)
-- Scene JSON authoring **and** script APIs: `Engine.setLight*` / `Engine.getLight*` (setters use session-global soft ownership for spawned lights; getters are open reads). Lights may also be spawned with optional props via `Engine.spawnEntity({ type = "pointlight", color = ..., intensity = ..., ... })`.
+- Scene JSON authoring **and** script APIs: `Engine.setLight*` / `Engine.getLight*` (setters use per-caller ownership for spawned lights; getters are open reads). Lights may also be spawned with optional props via `Engine.spawnEntity({ type = "pointlight", color = ..., intensity = ..., ... })`.
+
+**GPU hard caps** (enabled lights uploaded): **32** point, **4** directional, **32** spot. Overflow drops extras (first-N kept) and logs a warning. See [Asset budgets](/docs/scene-format/asset-budgets).
+
+**Ambient when IBL is off:** a fixed shader fallback of approximately `vec3(0.03) * albedo * ao`—not author-configurable. Prefer a skybox/IBL path or explicit lights for mood control.
 
 Scene-authored light props and entity visibility are restored from `scene_state` v2 (`entityLights`, `entityVisibility`) on reload.
 
@@ -118,7 +122,8 @@ Directional lights can cast shadows:
 Skyboxes provide environment mapping:
 
 - **Purpose**: Background environment (sky, space, etc.)
-- **Format**: Equirectangular skybox texture as an LDR image (**PNG / JPG / JPEG / TGA** only). HDR/EXR skyboxes are not supported. Separate 6-face cubemap file lists are not supported.
+- **Product path (permanent):** equirectangular **LDR** image (**PNG / JPG / JPEG / TGA** only)
+- **Not supported:** HDR/EXR environment maps; separate **6-face** cubemap file lists (convert to equirect for DDDBrowser)
 - **Rotation**: Optional rotation for animated skies
 - **Configuration**: Defined in scene JSON
 
@@ -206,11 +211,17 @@ Movement bounds limit player movement:
 
 ## Occlusion culling
 
-When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer on the GPU (from the previous frame’s depth) and batch-tests mesh bounds with a compute shader. Visibility results are applied with a **one-frame delay** (double-buffered SSBO readback) so the current frame does not stall on `glGetBufferSubData`. New or unknown candidates stay visible (conservative) until a delayed result arrives. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer (HZB) on the GPU (from the previous frame’s depth) and batch-tests mesh bounds with a compute shader. Visibility results are applied with a **one-frame delay** (double-buffered SSBO readback) so the current frame does not stall on `glGetBufferSubData`. New or unknown candidates stay visible (conservative) until a delayed result arrives. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+
+**Product stance:** HZB compute occlusion is the supported path. Classic OpenGL **hardware occlusion queries** are **not** shipped and remain deferred—authors should not expect query-object occlusion behavior.
+
+## Shadows (draw path)
+
+Shadow maps use dedicated CSM / spot / point paths. **Multi-draw indirect (MDI)** may be used for some opaque geometry batches; the **shadow pass is not on the geometry MDI path** and is not planned as a required optimization for authors. Toggle Shadows in Settings for cost control.
 
 ## Asset streaming (textures / IBL)
 
-Texture uploads use a small **PBO ring** on the render thread; mipmap generation is deferred to a follow-up frame. Skybox equirectangular upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame.
+Texture uploads use a small **PBO ring** on the render thread; mipmap generation is deferred to a follow-up frame. Skybox equirectangular upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame. Mesh upload PBO expansion is a separate deferred polish item.
 
 ## Instanced mesh sync
 

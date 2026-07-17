@@ -47,6 +47,24 @@ HDR/EXR textures are not supported for materials or skyboxes (skybox: equirectan
 | Integrity | Prefer `sha256` pin on public scripts |
 | Origin | Same host as scene URL, or Settings → Script origins |
 
+## Lights (GPU hard caps)
+
+| Type | Max enabled uploaded |
+|------|---------------------:|
+| Point | **32** |
+| Directional | **4** |
+| Spot | **32** |
+
+Overflow keeps the first N enabled lights of each type; extras are ignored and a warning is logged. Prefer staying under these caps for predictable lighting.
+
+## Sky / environment
+
+| Path | Product stance |
+|------|----------------|
+| Skybox | **Equirectangular LDR** only (PNG/JPG/JPEG/TGA) |
+| Six-face cubemap lists | **Not supported** (permanent for this product surface) |
+| HDR/EXR environment | **Not supported** (no HDR IBL product path) |
+
 ## Scene structure
 
 | Limit | Value |

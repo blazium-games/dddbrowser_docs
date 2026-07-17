@@ -20,8 +20,10 @@ Soft guidance for public scenes. Hard caps live in [Asset budgets](/docs/scene-f
 
 ## Lighting
 
-- Prefer a small set of lights (directional + few points/spots).
+- Prefer a small set of lights (directional + few points/spots); hard caps are **32 / 4 / 32**.
 - Shadows and occlusion are toggles in Settings; heavy shadow casters cost fill rate.
+- Occlusion uses **HZB compute** when available—not HW occlusion queries.
+- Do not assume shadow drawing uses the same MDI path as opaque geometry.
 
 ## Scripts
 

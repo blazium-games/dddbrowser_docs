@@ -6,9 +6,11 @@ sidebar_position: 3
 
 How portals and URL travel work for authors.
 
-## One scene at a time
+## One scene at a time (permanent product model)
 
-DDDBrowser loads **exactly one** scene. Portal or URL travel **unloads** the current scene and **loads** the destination. There is no seamless streamed adjacency yet (`world.id` / `world.position` are metadata + compatibility checks).
+DDDBrowser loads **exactly one** scene. Portal or URL travel **unloads** the current scene and **loads** the destination. This is the supported product model—not a temporary gap before “streaming worlds.”
+
+`world.id` / `world.position` remain metadata + portal compatibility checks only. Do not author for continuous multi-scene adjacency or in-memory neighbor streaming.
 
 ## Trigger mutex
 

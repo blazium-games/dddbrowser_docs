@@ -194,7 +194,7 @@ Skybox configuration for environment mapping.
 ```
 
 Properties:
-- `uri` (string, required): HTTPS URL to an equirectangular LDR skybox (`.png`, `.jpg`, `.jpeg`, or `.tga` only; HDR/EXR not supported)
+- `uri` (string, required): HTTPS URL to an equirectangular LDR skybox (`.png`, `.jpg`, `.jpeg`, or `.tga` only). HDR/EXR and six-face cubemap lists are not product paths.
 - `rotation` (vec3, optional): Rotation in degrees
 
 #### `autosaveNotification` (object, optional)
