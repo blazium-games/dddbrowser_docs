@@ -129,11 +129,11 @@ Configure on-screen notifications when autosave occurs.
 
 ## Trigger Volumes
 
-Trigger volumes detect player presence and trigger events. There are many types:
+Trigger volumes detect player presence and fire **author-chosen** gamemode event names via `Gamemode.onEvent(eventName, data)`. Most volume types require an `eventName` string in their typed properties object (not a synthetic `volume_*` name).
 
 ### Look At Volume (`type: "lookAtVolume"`)
 
-Triggers when player looks at the volume.
+Fires when the player looks toward the volume (outside it).
 
 ```json
 {
@@ -142,13 +142,20 @@ Triggers when player looks at the volume.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "lookAtVolume": {}
+  "lookAtVolume": {
+    "eventName": "looked_at_sign",
+    "singleUse": false,
+    "cooldownSeconds": 0,
+    "fovDegrees": 30
+  }
 }
 ```
 
+**Properties**: `eventName` (required); optional `singleUse`, `cooldownSeconds`, `fovDegrees`
+
 ### Looked At Volume (`type: "lookedAtVolume"`)
 
-Triggers once when player has looked at it.
+Fires when the player is inside the volume and looks at a target instance.
 
 ```json
 {
@@ -157,13 +164,19 @@ Triggers once when player has looked at it.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "lookedAtVolume": {}
+  "lookedAtVolume": {
+    "eventName": "looked_at_npc",
+    "targetInstanceId": "npc-1",
+    "fovDegrees": 30
+  }
 }
 ```
 
+**Properties**: `eventName`, `targetInstanceId` (required); optional `singleUse`, `cooldownSeconds`, `fovDegrees`
+
 ### Single Trigger Volume (`type: "singleTriggerVolume"`)
 
-Triggers once when player enters.
+Fires once on enter.
 
 ```json
 {
@@ -172,13 +185,15 @@ Triggers once when player enters.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "singleTriggerVolume": {}
+  "singleTriggerVolume": {
+    "eventName": "checkpoint_reached"
+  }
 }
 ```
 
 ### Multi Trigger Volume (`type: "multiTriggerVolume"`)
 
-Triggers every time player enters.
+Fires every enter (optionally capped).
 
 ```json
 {
@@ -187,13 +202,17 @@ Triggers every time player enters.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "multiTriggerVolume": {}
+  "multiTriggerVolume": {
+    "eventName": "zone_entered",
+    "maxFires": 0,
+    "autoRemoveOnFire": false
+  }
 }
 ```
 
 ### Cooldown Trigger Volume (`type: "cooldownTriggerVolume"`)
 
-Triggers with a cooldown period.
+Fires on enter with a cooldown between fires.
 
 ```json
 {
@@ -203,17 +222,18 @@ Triggers with a cooldown period.
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
   "cooldownTriggerVolume": {
-    "cooldown": 5.0
+    "eventName": "pickup_pulse",
+    "cooldownSeconds": 5.0,
+    "maxFires": 0
   }
 }
 ```
 
-**Properties**:
-- `cooldown` (number): Cooldown time in seconds
+**Properties**: `eventName`, `cooldownSeconds` (required); optional `maxFires`
 
 ### Exit Trigger Volume (`type: "exitTriggerVolume"`)
 
-Triggers when player exits the volume.
+Fires when the player exits the volume.
 
 ```json
 {
@@ -222,13 +242,15 @@ Triggers when player exits the volume.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "exitTriggerVolume": {}
+  "exitTriggerVolume": {
+    "eventName": "left_safe_zone"
+  }
 }
 ```
 
 ### Stay Trigger Volume (`type: "stayTriggerVolume"`)
 
-Triggers continuously while player stays in volume.
+Fires repeatedly while the player remains inside.
 
 ```json
 {
@@ -238,17 +260,17 @@ Triggers continuously while player stays in volume.
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
   "stayTriggerVolume": {
-    "interval": 1.0
+    "eventName": "healing_tick",
+    "stayInterval": 1.0
   }
 }
 ```
 
-**Properties**:
-- `interval` (number, optional): Trigger interval in seconds
+**Properties**: `eventName`, `stayInterval` (required)
 
 ### Timed Entry Trigger Volume (`type: "timedEntryTriggerVolume"`)
 
-Triggers after player has been in volume for a duration.
+Fires after the player has stayed inside for a duration.
 
 ```json
 {
@@ -258,17 +280,17 @@ Triggers after player has been in volume for a duration.
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
   "timedEntryTriggerVolume": {
-    "duration": 3.0
+    "eventName": "channel_complete",
+    "requiredStayTime": 3.0
   }
 }
 ```
 
-**Properties**:
-- `duration` (number): Required stay duration in seconds
+**Properties**: `eventName`, `requiredStayTime` (required)
 
 ### Counter Trigger Volume (`type: "counterTriggerVolume"`)
 
-Triggers after player enters a certain number of times.
+Shares a named counter (`counter_word`) across volumes; increments on enter. Schema fields are `counter_word` / `required_count` only (no author `eventName` today).
 
 ```json
 {
@@ -278,17 +300,19 @@ Triggers after player enters a certain number of times.
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
   "counterTriggerVolume": {
-    "count": 5
+    "counter_word": "switches",
+    "required_count": 5,
+    "auto_reset_after_fire": false,
+    "fire_once_when_reached": false
   }
 }
 ```
 
-**Properties**:
-- `count` (number): Required entry count
+**Properties**: `counter_word`, `required_count` (required); optional `auto_reset_after_fire`, `fire_once_when_reached`
 
 ### Sequence Trigger Volume (`type: "sequenceTriggerVolume"`)
 
-Volumes in the same `sequence_group_id` must be entered in ascending `sequence_index` order. The completion `eventName` fires only after the highest index in the group has been completed correctly.
+Volumes in the same `sequence_group_id` must be entered in ascending `sequence_index` order. Optional `eventName` is the **completion** event (fires once when the highest index in the group is completed correctly).
 
 ```json
 {
@@ -307,14 +331,14 @@ Volumes in the same `sequence_group_id` must be entered in ascending `sequence_i
 ```
 
 **Properties**:
-- `sequence_group_id` (string): Group shared by ordered steps
-- `sequence_index` (integer): Step index (0-based)
-- `reset_if_wrong` (boolean): Reset progress when entered out of order
-- `eventName` (string): Gamemode event fired when the full sequence completes
+- `sequence_group_id` (string, required)
+- `sequence_index` (integer, required, 0-based)
+- `reset_if_wrong` (boolean, optional)
+- `eventName` (string, optional): Completion gamemode event
 
 ### Toggle Trigger Volume (`type: "toggleTriggerVolume"`)
 
-Toggles on/off each time player enters.
+Toggles on/off each enter; fires `on_activate_event` / `on_deactivate_event` when set.
 
 ```json
 {
@@ -323,13 +347,17 @@ Toggles on/off each time player enters.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "toggleTriggerVolume": {}
+  "toggleTriggerVolume": {
+    "is_on": false,
+    "on_activate_event": "gate_open",
+    "on_deactivate_event": "gate_close"
+  }
 }
 ```
 
 ## Teleport Volumes
 
-Teleport volumes instantly move the player to a new position.
+Teleport volumes instantly move the player to a new position. On activation they also fire the fixed gamemode event `teleport_volume_activated`.
 
 ```json
 {
@@ -351,7 +379,7 @@ Teleport volumes instantly move the player to a new position.
 
 ## Interaction Volumes
 
-Interaction volumes provide custom interaction zones. The `action` field is matched case-insensitively against runtime action names (`interact`, `jump`, etc.). Docs/schema may use either `"interact"` or `"Interact"`.
+Interaction volumes fire when the player is inside and presses a bound action. The `action` field is matched case-insensitively against runtime action names (`interact`, `jump`, etc.).
 
 ```json
 {
@@ -367,6 +395,8 @@ Interaction volumes provide custom interaction zones. The `action` field is matc
 }
 ```
 
+**Properties**: `eventName`, `action` (required)
+
 ## Volume Size
 
 All volumes use the `scale` property to define their size:
@@ -379,13 +409,17 @@ The volume is a box centered at the position, with dimensions determined by scal
 
 ## Trigger Events
 
-Trigger volumes fire events that can be handled by:
+When a volume fires, the runtime calls `Gamemode.triggerEvent` / listeners registered with `Gamemode.onEvent` using the **author-supplied** `eventName` (or toggle activate/deactivate names, or sequence completion `eventName`). Payload typically includes `instanceId` and a `reason` string (for example `enter`, `exit`, `stay`, `interaction`).
 
-- Gamemode scripts via `Gamemode.onEvent()`
-- Entity scripts via event listeners
-- Engine systems
+There is **no** automatic `volume_<type>_<instanceId>` event name pattern.
 
-Event names follow the pattern: `volume_<type>_<instanceId>`
+Handle events in gamemode scripts:
+
+```lua
+Gamemode.onEvent("zone_used", function(data)
+    print("Used zone", data.instanceId)
+end)
+```
 
 ## Best Practices
 

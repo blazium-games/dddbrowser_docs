@@ -138,6 +138,7 @@ Audio files for sound effects and music.
   "uri": "https://example.com/sound.wav",
   "mediaType": "audio/wav",
   "audio": {
+    "format": "wav",
     "ambient": false
   }
 }
@@ -147,7 +148,8 @@ Audio files for sound effects and music.
 **Media types**: `audio/wav`
 **Limits**: Max WAV file size **32 MiB**
 **Audio properties**:
-- `ambient` (boolean, optional): Whether audio is ambient (constant volume). A `format` field is not read by the validator (WAV is implied by `mediaType` / extension).
+- `format` (string, required by schema): Must be `"wav"`
+- `ambient` (boolean, optional): Whether audio is ambient (constant volume)
 
 ### Textbox (`type: "textbox"`)
 
@@ -299,6 +301,7 @@ Collider types:
     "uri": "https://example.com/sound.wav",
     "mediaType": "audio/wav",
     "audio": {
+      "format": "wav",
       "ambient": false
     }
   }

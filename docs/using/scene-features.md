@@ -27,19 +27,12 @@ See [Portal Examples](/docs/examples/portals/portal-source) for more details.
 
 ## Textboxes
 
-Textboxes display information and collect user input:
+Two related surfaces exist:
 
-- **Purpose**: Show text, dialogs, quests, etc.
-- **Features**:
-  - Title and content text
-  - Action buttons
-  - Checkboxes for preferences
-  - Script callbacks for user actions
-- **Types**:
-  - Scene textbox instances (3D positioned)
-  - ImGui textboxes (overlay style)
+- **World billboard textboxes**: Scene instances of type `textbox` (asset + instance). These are 3D-positioned billboards rendered in the world by the textbox system. They are authored in scene JSON, not opened as a modal.
+- **Modal textboxes**: Script-driven UI via `Engine.openTextBox()` / `Engine.closeTextBox()` (and the ImGui variants). These show an overlay modal with title, body, buttons, and checkboxes, with an optional Lua callback for the result.
 
-Textboxes are controlled by scripts using `Engine.openTextBox()` and `Engine.closeTextBox()`.
+Do not confuse world billboard instances with the modal API — both can appear in the same scene for different purposes.
 
 See [Textbox Examples](/docs/examples/features/textbox-scene) for usage.
 
@@ -102,7 +95,9 @@ All lights support:
 - Color (RGB)
 - Intensity (brightness)
 - Shadows (directional lights)
-- Configured in scene JSON (script light setters are not available)
+- Scene JSON authoring **and** script APIs: `Engine.setLight*` / `Engine.getLight*` (setters use session-global soft ownership for spawned lights; getters are open reads). Lights may also be spawned with optional props via `Engine.spawnEntity({ type = "pointlight", color = ..., intensity = ..., ... })`.
+
+Scene-authored light props and entity visibility are restored from `scene_state` v2 (`entityLights`, `entityVisibility`) on reload.
 
 See [Lighting Examples](/docs/examples/lighting/directional-light) for usage.
 
@@ -176,7 +171,7 @@ Autosave volumes automatically save scene state:
 - **Purpose**: Persistent game state
 - **Trigger**: Player enters the volume
 - **Notification**: Optional on-screen notification
-- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), and transforms for mutable scene instances. Session-spawned lights restore color/intensity/enabled/range (and spot direction/cutoffs); audio restores loop/volume/autoPlay/ambient. Spawn ids (`lua_spawn_N`) advance the session counter on load so new spawns do not collide. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
+- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), transforms for mutable scene instances, plus `entityVisibility` (hidden renderables) and `entityLights` (color/intensity/enabled/range and spot extras for **scene-authored and spawned** lights). Session-spawned audio restores loop/volume/autoPlay/ambient. Spawn ids (`lua_spawn_N`) advance the session counter on load so new spawns do not collide. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
 
 See [Scene Save Examples](/docs/examples/scene-save/scene-save-autosave-default) for usage.
 

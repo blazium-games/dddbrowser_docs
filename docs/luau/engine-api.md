@@ -238,6 +238,17 @@ Engine.setLightRange(lightId, 20.0)
 
 **Returns**: `boolean` - `true` if applied
 
+### Engine.getLightColor(instanceId) / getLightIntensity / getLightEnabled / getLightRange
+
+Read light properties. Unlike setters, getters are **not** ownership-gated (same open-read model as `getEntityPosition`). Returns `nil` / falsey when the id is missing or not a light.
+
+```lua
+local color = Engine.getLightColor(lightId)       -- {x,y,z} or nil
+local intensity = Engine.getLightIntensity(lightId)
+local enabled = Engine.getLightEnabled(lightId)   -- boolean or nil
+local range = Engine.getLightRange(lightId)       -- number or nil (point/spot)
+```
+
 ### Engine.getCamera()
 
 Read the current camera position and forward vector from `InputState`.
@@ -272,13 +283,13 @@ Trigger travel for a portal instance by id (uses the portal's `destinationUrl` t
 
 ```lua
 function MyPortalScript:on_interact(actorId)
-    Engine.triggerPortal(self.assetId)  -- or the portal instance id
+    Engine.triggerPortal(self.asset_id)  -- portal instance id (script env field)
 end
 ```
 
 Used with portals that have `scriptTrigger: true` (exactly one trigger mode). Prefer this when the destination should come from the portal component; use `Scene.TravelTo(url)` when the script chooses a URL.
 
-**Returns**: `true` if the portal was found and travel was requested, otherwise `false`.
+**Returns**: `true` only if the portal exists, is active, and travel was requested; otherwise `false`.
 
 ## Networking
 
@@ -503,9 +514,16 @@ local id = Engine.spawnEntity({
     asset = "my-model-asset", -- required for model/audio
     position = {x = 0, y = 1, z = 0},
     rotation = {x = 0, y = 0, z = 0},
-    scale = {x = 1, y = 1, z = 1}
+    scale = {x = 1, y = 1, z = 1},
+    -- optional light props (lights):
+    -- color = {x = 1, y = 0.5, z = 0.2}, intensity = 2.5, enabled = true, range = 12,
+    -- direction = {x = 0, y = -1, z = 0}, cutoff = 12.5, outerCutoff = 17.5,
+    -- optional audio props:
+    -- loop = false, volume = 1.0, autoPlay = true, ambient = false
 })
 ```
+
+Absent optional fields keep the current spawn defaults (white light intensity 1 / range 10; audio loop false, volume 1, autoPlay true).
 
 ### Engine.destroyEntity(instanceId)
 
