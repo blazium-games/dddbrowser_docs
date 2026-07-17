@@ -17,13 +17,13 @@ Skyboxes provide environment mapping for the scene background.
 }
 ```
 
-**Properties**:
-- `uri` (string, required): URL to skybox texture
-  - **Permanent product path:** equirectangular LDR only (`.png`, `.jpg`, `.jpeg`, or `.tga`)
-  - HDR/EXR environment maps are **not** a product path
-  - Six-face cubemap file lists are **not** supported—export/convert to equirect
-  - Must be HTTPS (or Allow HTTP for travel testing)
-- `rotation` (vec3, optional): Rotation in degrees for animated skies
+**Properties** — specify **exactly one** of:
+
+- `uri` (string): equirectangular sky — LDR (`.png` / `.jpg` / `.jpeg` / `.tga`) or Radiance `.hdr` (HTTPS, or Allow HTTP for travel testing)
+- `faces` (object): six-face cubemap with `px`, `nx`, `py`, `ny`, `pz`, `nz` HTTPS URIs (all LDR or all `.hdr`)
+- `rotation` (vec3, optional): Rotation in degrees
+
+EXR is not supported.
 
 **Use cases**: Sky, space, indoor environments, atmosphere
 

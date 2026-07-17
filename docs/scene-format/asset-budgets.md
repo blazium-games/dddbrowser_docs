@@ -30,7 +30,7 @@ Hard and soft limits enforced at load. Exceeding them fails the scene (or the as
 | Max total pixels | **4096×4096** |
 | Max file size | **64 MiB** |
 
-HDR/EXR textures are not supported for materials or skyboxes (skybox: equirectangular LDR only).
+HDR material maps are not supported. Skyboxes may use Radiance `.hdr` (equirect or six-face); EXR is not supported.
 
 ## Audio
 
@@ -61,9 +61,9 @@ Overflow keeps the first N enabled lights of each type; extras are ignored and a
 
 | Path | Product stance |
 |------|----------------|
-| Skybox | **Equirectangular LDR** only (PNG/JPG/JPEG/TGA) |
-| Six-face cubemap lists | **Not supported** (permanent for this product surface) |
-| HDR/EXR environment | **Not supported** (no HDR IBL product path) |
+| Equirect skybox | LDR PNG/JPG/TGA **or** Radiance `.hdr` (64 MiB / 8192² soft caps) |
+| Six-face cubemap | `faces` object; square faces; all LDR or all `.hdr` |
+| EXR / DDS / KTX env | **Not supported** |
 
 ## Scene structure
 

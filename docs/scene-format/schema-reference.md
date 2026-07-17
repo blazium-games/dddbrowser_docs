@@ -188,13 +188,29 @@ Skybox configuration for environment mapping.
 
 ```json
 "skybox": {
-  "uri": "https://example.com/skybox.jpg",
+  "uri": "https://example.com/skybox.hdr",
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0}
 }
 ```
 
+Or six-face (mutually exclusive with `uri`):
+
+```json
+"skybox": {
+  "faces": {
+    "px": "https://example.com/px.png",
+    "nx": "https://example.com/nx.png",
+    "py": "https://example.com/py.png",
+    "ny": "https://example.com/ny.png",
+    "pz": "https://example.com/pz.png",
+    "nz": "https://example.com/nz.png"
+  }
+}
+```
+
 Properties:
-- `uri` (string, required): HTTPS URL to an equirectangular LDR skybox (`.png`, `.jpg`, `.jpeg`, or `.tga` only). HDR/EXR and six-face cubemap lists are not product paths.
+- Equirect `uri` **or** cubemap `faces` (exactly one)
+- Formats: LDR PNG/JPG/TGA or Radiance `.hdr` (skybox only). EXR is not supported.
 - `rotation` (vec3, optional): Rotation in degrees
 
 #### `autosaveNotification` (object, optional)

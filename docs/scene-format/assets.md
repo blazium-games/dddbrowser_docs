@@ -97,14 +97,14 @@ Image files used for textures.
 }
 ```
 
-**Supported formats**: PNG, JPG, JPEG, TGA (**LDR only** — no HDR/EXR/DDS/KTX product path)
+**Supported formats (materials):** PNG, JPG, JPEG, TGA (**LDR only** — no HDR/EXR/DDS/KTX for mesh maps)
 **Media types**: `image/png`, `image/jpeg`, `image/jpg`, `image/tga`
 **Usage**: Referenced by materials or pictureboxes
 **Limits** (rejected at load — see [Asset budgets](/docs/scene-format/asset-budgets)):
 - Max dimension: **8192** px on either side
 - Max total pixels: **4096×4096** (16,777,216)
 - Max file size: **64 MiB**
-- Skyboxes use the same LDR image set (equirectangular); six-face cubemap file lists are not supported
+- Skyboxes: equirect `uri` or six-face `faces` — LDR images or Radiance `.hdr` (see [Advanced](/docs/scene-format/advanced))
 
 ### Script (`type: "script"`)
 

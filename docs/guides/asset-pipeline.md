@@ -16,7 +16,7 @@ How to get content from a DCC tool into a loadable DDDBrowser scene.
 | Scripts | Luau (`.luau`) |
 | Scene | JSON discovered from HTML |
 
-**Not supported:** glTF, GLB, FBX, USD, HDR textures, compressed WAV.
+**Not supported:** glTF, GLB, FBX, USD, HDR **material** maps, EXR, compressed WAV. Skyboxes may use Radiance `.hdr` or six-face lists.
 
 ## Recommended export flow
 
