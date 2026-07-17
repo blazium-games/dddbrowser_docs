@@ -133,7 +133,7 @@ X-Blazium-Scene: {"id":"my_scene","name":"My Scene","author":"Creator","rating":
 - **`world.id`** (string): World identifier
 - **`world.position`** (vec3): Position in world space
 
-Worlds allow multiple scenes to exist in the same coordinate space.
+`world.id` / `world.position` are metadata for display and portal world-id checks. The runtime loads one scene at a time; seamless shared-coordinate multi-scene worlds are not implemented yet.
 
 ## Complete Example
 

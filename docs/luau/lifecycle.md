@@ -228,9 +228,9 @@ function Persistent:on_update(dt)
 end
 
 function Persistent:on_save()
+    -- Note: the sandbox does not provide os.time() (os is nil). Persist script state only.
     return {
-        counter = self.counter,
-        timestamp = os.time()
+        counter = self.counter
     }
 end
 

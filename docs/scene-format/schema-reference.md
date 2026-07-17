@@ -145,8 +145,8 @@ Defaults to (-100, -100, -100) to (100, 100, 100) if not specified.
 #### `gameType` (string, optional)
 
 Player movement type. Must be one of:
-- `"FPS"` - First-person shooter style movement (default)
-- `"NONE"` - No player movement, view-only
+- `"FPS"` - Physics-driven first-person movement (default)
+- `"NONE"` - WASD fly-cam exploration (no FPS physics controller)
 
 ```json
 "gameType": "FPS"
@@ -193,7 +193,7 @@ Skybox configuration for environment mapping.
 ```
 
 Properties:
-- `uri` (string, required): URL to skybox texture
+- `uri` (string, required): HTTPS URL to an equirectangular LDR skybox (`.png`, `.jpg`, `.jpeg`, or `.tga` only; HDR/EXR not supported)
 - `rotation` (vec3, optional): Rotation in degrees
 
 #### `autosaveNotification` (object, optional)

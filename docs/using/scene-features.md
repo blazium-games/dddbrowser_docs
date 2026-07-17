@@ -103,7 +103,7 @@ All lights support:
 - Color (RGB)
 - Intensity (brightness)
 - Shadows (directional lights)
-- Real-time updates via scripts
+- Configured in scene JSON (script light setters are not available)
 
 See [Lighting Examples](/docs/examples/lighting/directional-light) for usage.
 
@@ -117,14 +117,14 @@ Directional lights can cast shadows:
   - Shadow bias
   - Orthographic size
 - **Performance**: Higher resolution = better quality but slower
-- **Limitations**: Only directional lights cast shadows
+- **Shadows**: Directional (CSM), spot, and point (cubemap) lights can cast shadows when `shadowEnabled` is set
 
 ## Skyboxes
 
 Skyboxes provide environment mapping:
 
 - **Purpose**: Background environment (sky, space, etc.)
-- **Format**: Cubemap texture (6 faces or equirectangular)
+- **Format**: Equirectangular skybox texture as an LDR image (**PNG / JPG / JPEG / TGA** only). HDR/EXR skyboxes are not supported. Separate 6-face cubemap file lists are not supported.
 - **Rotation**: Optional rotation for animated skies
 - **Configuration**: Defined in scene JSON
 
@@ -177,7 +177,7 @@ Autosave volumes automatically save scene state:
 - **Purpose**: Persistent game state
 - **Trigger**: Player enters the volume
 - **Notification**: Optional on-screen notification
-- **State**: Saves gamemode and script state
+- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), and transforms for mutable scene instances. Session-spawned lights restore color/intensity/enabled/range (and spot direction/cutoffs); audio restores loop/volume/autoPlay. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
 
 See [Scene Save Examples](/docs/examples/scene-save/scene-save-autosave-default) for usage.
 
@@ -208,6 +208,18 @@ Movement bounds limit player movement:
 - **Default**: (-100, -100, -100) to (100, 100, 100)
 - **Use case**: Confined spaces, levels with boundaries
 
+## Occlusion culling
+
+When OpenGL 4.3+ compute is available, DDDBrowser builds a hierarchical Z-buffer on the GPU (from the previous frame’s depth) and batch-tests mesh bounds with a compute shader. Visibility results are applied with a **one-frame delay** (double-buffered SSBO readback) so the current frame does not stall on `glGetBufferSubData`. New or unknown candidates stay visible (conservative) until a delayed result arrives. Without compute support, occlusion culling is skipped (frustum/portal culling still apply).
+
+## Asset streaming (textures / IBL)
+
+Texture uploads use a small **PBO ring** on the render thread; mipmap generation is deferred to a follow-up frame. Skybox equirectangular upload and IBL (irradiance + specular prefilter) share the per-frame asset budget (~6 ms): IBL advances one cubemap face (or one prefilter mip-face) per tick instead of baking everything in a single frame.
+
+## Instanced mesh sync
+
+ECS → InstanceManager sync interns mesh cache keys (`MeshKeyId`) and tracks a per-mesh **entity-set fingerprint**. Transform-only updates patch instances in place; adding or removing entities remaps only the affected mesh batch (no global instance clear on set changes).
+
 ## Game Types
 
 Scenes can specify a game type:
@@ -215,10 +227,10 @@ Scenes can specify a game type:
 - **FPS**: First-person shooter style movement
   - Full movement controls
   - Jump, sprint, crouch, etc.
-- **NONE**: View-only mode
-  - No player movement
-  - Camera controls only
-  - For viewing/interacting only
+- **NONE**: Fly-cam exploration (no FPS physics controller)
+  - WASD free-look camera movement
+  - Mouse look
+  - Interact with objects / portals
 
 ## Next Steps
 

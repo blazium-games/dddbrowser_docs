@@ -44,6 +44,10 @@ All assets have this basic structure:
 **Supported formats**: OBJ (`.obj` files)
 **Media types**: `model/obj`
 **Materials**: Use separate material assets (MTL files)
+**Constraints**:
+- Triangle faces only (quads/ngons are skipped)
+- OBJ file size cap: **64 MiB**; MTL: **16 MiB**
+- Soft caps: ~2M vertices, ~8M indices, 8192 meshes / 4096 shapes / 4096 materials per OBJ
 
 ### Material (`type: "material"`)
 
@@ -75,9 +79,13 @@ Image files used for textures.
 }
 ```
 
-**Supported formats**: PNG, JPG, JPEG, TGA
+**Supported formats**: PNG, JPG, JPEG, TGA (LDR only)
 **Media types**: `image/png`, `image/jpeg`, `image/jpg`, `image/tga`
 **Usage**: Referenced by materials or pictureboxes
+**Limits** (rejected at load):
+- Max dimension: **8192** px on either side
+- Max total pixels: **4096×4096** (16,777,216)
+- Max file size: **64 MiB**
 
 ### Script (`type: "script"`)
 
@@ -136,8 +144,9 @@ Audio files for sound effects and music.
 }
 ```
 
-**Supported formats**: WAV (`.wav` files)
+**Supported formats**: WAV (`.wav` files), **PCM only** (compressed WAV is not supported)
 **Media types**: `audio/wav`
+**Limits**: Max WAV file size **32 MiB**
 **Audio properties**:
 - `format` (string, required): Audio format - currently only `"wav"`
 - `ambient` (boolean, optional): Whether audio is ambient (constant volume)

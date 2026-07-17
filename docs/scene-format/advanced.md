@@ -19,7 +19,8 @@ Skyboxes provide environment mapping for the scene background.
 
 **Properties**:
 - `uri` (string, required): URL to skybox texture
-  - Supports cubemap (6 faces) or equirectangular formats
+  - Equirectangular LDR image only: `.png`, `.jpg`, `.jpeg`, or `.tga` (HDR/EXR not supported)
+  - 6-face cubemap file lists are not supported
   - Must be HTTPS
 - `rotation` (vec3, optional): Rotation in degrees for animated skies
 
@@ -287,23 +288,29 @@ Triggers after player enters a certain number of times.
 
 ### Sequence Trigger Volume (`type: "sequenceTriggerVolume"`)
 
-Triggers in a sequence pattern.
+Volumes in the same `sequence_group_id` must be entered in ascending `sequence_index` order. The completion `eventName` fires only after the highest index in the group has been completed correctly.
 
 ```json
 {
-  "id": "sequence-trigger",
+  "id": "sequence-step-0",
   "type": "sequenceTriggerVolume",
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
   "sequenceTriggerVolume": {
-    "sequence": [1, 2, 3]
+    "sequence_group_id": "puzzle_a",
+    "sequence_index": 0,
+    "reset_if_wrong": true,
+    "eventName": "puzzle_a_complete"
   }
 }
 ```
 
 **Properties**:
-- `sequence` (array): Sequence pattern
+- `sequence_group_id` (string): Group shared by ordered steps
+- `sequence_index` (integer): Step index (0-based)
+- `reset_if_wrong` (boolean): Reset progress when entered out of order
+- `eventName` (string): Gamemode event fired when the full sequence completes
 
 ### Toggle Trigger Volume (`type: "toggleTriggerVolume"`)
 
@@ -344,7 +351,7 @@ Teleport volumes instantly move the player to a new position.
 
 ## Interaction Volumes
 
-Interaction volumes provide custom interaction zones.
+Interaction volumes provide custom interaction zones. The `action` field is matched case-insensitively against runtime action names (`interact`, `jump`, etc.). Docs/schema may use either `"interact"` or `"Interact"`.
 
 ```json
 {
@@ -353,7 +360,10 @@ Interaction volumes provide custom interaction zones.
   "position": {"x": 0.0, "y": 0.0, "z": 0.0},
   "rotation": {"x": 0.0, "y": 0.0, "z": 0.0},
   "scale": {"x": 2.0, "y": 2.0, "z": 2.0},
-  "interactionVolume": {}
+  "interactionVolume": {
+    "eventName": "zone_used",
+    "action": "interact"
+  }
 }
 ```
 

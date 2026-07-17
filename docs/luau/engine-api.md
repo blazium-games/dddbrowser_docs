@@ -11,7 +11,9 @@ The `Engine` API provides access to core engine functionality including input, n
 The `Engine` table is available in all scripts and provides functions for:
 
 - Input state queries
-- Entity manipulation (position, scale, rotation)
+- Entity manipulation (position, scale, rotation, visibility)
+- Light control (color, intensity, enabled, range) for session-spawned lights
+- Camera get/set
 - HTTP requests
 - UI (textboxes, modals)
 - Audio playback
@@ -30,12 +32,11 @@ end
 ```
 
 **Parameters**:
-- `action` (string): Action name
-  - `"move_forward"` - Move forward
-  - `"move_backward"` - Move backward
-  - `"move_left"` - Move left
-  - `"move_right"` - Move right
+- `action` (string): Action name (lowercase)
+  - `"move_forward"` / `"move_backward"` / `"move_left"` / `"move_right"`
   - `"interact"` - Interact button held
+  - `"jump"` - Jump press pending this frame
+  - `"sprint"` / `"crouch"` - Modifier keys held
 
 **Returns**: `boolean` - `true` if action is active, `false` otherwise
 
@@ -82,21 +83,27 @@ end
 
 ## Entity Manipulation
 
-### Engine.setEntityPosition(entityId, x, y, z)
+### Engine.setEntityPosition(entityIdOrInstanceId, x, y, z)
 
 Set the position of an entity.
 
 ```lua
 Engine.setEntityPosition(self.entity, 0, 5, 0)
+-- or, for scene / spawnEntity instance ids:
+Engine.setEntityPosition("lua_spawn_1", 0, 5, 0)
 ```
 
 **Parameters**:
-- `entityId` (number): Entity ID (use `self.entity` for current entity)
+- `entityIdOrInstanceId` (number|string): Script entity id (`self.entity`) **or** scene instance id string
 - `x` (number): X coordinate
 - `y` (number): Y coordinate
 - `z` (number): Z coordinate
 
 **Returns**: None
+
+**ID model**: Script components use numeric `self.entity`. Scene instances and `Engine.spawnEntity` use string instance ids. `getEntity*` / `destroyEntity` take instance ids; `setEntity*` accepts either form.
+
+**Ownership**: String instance ids are subject to session-global soft ownership. With a script caller, the id must be the caller's `assetId` or a session-spawned id. Without a script caller, only session-spawned ids are accepted. Rejected updates log a warning and do nothing (they do not throw).
 
 **Example**:
 ```lua
@@ -107,16 +114,17 @@ function MyScript:on_update(dt)
 end
 ```
 
-### Engine.setEntityScale(entityId, x, y, z)
+### Engine.setEntityScale(entityIdOrInstanceId, x, y, z)
 
-Set the scale of an entity.
+Set the scale of an entity. Accepts the same id forms as `setEntityPosition` (script entity id or scene/spawn instance id string). Scripts may transform instance ids returned from `Engine.spawnEntity` in the current session.
 
 ```lua
 Engine.setEntityScale(self.entity, 2.0, 2.0, 2.0)
+Engine.setEntityScale("lua_spawn_1", 2.0, 2.0, 2.0)
 ```
 
 **Parameters**:
-- `entityId` (number): Entity ID
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
 - `x` (number): X scale (must be > 0)
 - `y` (number): Y scale (must be > 0)
 - `z` (number): Z scale (must be > 0)
@@ -137,16 +145,17 @@ function MyScript:on_update(dt)
 end
 ```
 
-### Engine.setEntityRotation(entityId, x, y, z)
+### Engine.setEntityRotation(entityIdOrInstanceId, x, y, z)
 
-Set the rotation of an entity (Euler angles in degrees).
+Set the rotation of an entity (Euler angles in degrees). Same ownership rules as `setEntityPosition` / `setEntityScale`.
 
 ```lua
 Engine.setEntityRotation(self.entity, 0, 45, 0)
+Engine.setEntityRotation("lua_spawn_1", 0, 45, 0)
 ```
 
 **Parameters**:
-- `entityId` (number): Entity ID
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
 - `x` (number): X rotation in degrees (pitch)
 - `y` (number): Y rotation in degrees (yaw)
 - `z` (number): Z rotation in degrees (roll)
@@ -161,59 +170,137 @@ function MyScript:on_update(dt)
 end
 ```
 
+### Engine.setEntityVisible(entityIdOrInstanceId, visible)
+
+Show or hide a renderable entity. Same ownership rules as `setEntityPosition` (script entity id, or session-spawned / owned instance id).
+
+```lua
+Engine.setEntityVisible(self.entity, false)
+Engine.setEntityVisible("lua_spawn_1", true)
+```
+
+**Parameters**:
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
+- `visible` (boolean): Whether the entity should render
+
+**Returns**: `boolean` - `true` if the visibility change was applied
+
+### Engine.getEntityVisible(entityIdOrInstanceId)
+
+Query whether a renderable entity is visible.
+
+```lua
+local visible = Engine.getEntityVisible("lua_spawn_1")
+```
+
+**Parameters**:
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
+
+**Returns**: `boolean` or `nil` if the entity is missing / not renderable
+
+### Engine.setLightColor(instanceId, r, g, b)
+
+Set RGB color on a light entity. Intended for lights created via `Engine.spawnEntity` in the current session (session-global soft ownership).
+
+```lua
+Engine.setLightColor(lightId, 1.0, 0.5, 0.2)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightIntensity(instanceId, intensity)
+
+Set light intensity multiplier.
+
+```lua
+Engine.setLightIntensity(lightId, 2.5)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightEnabled(instanceId, enabled)
+
+Enable or disable a light without destroying it.
+
+```lua
+Engine.setLightEnabled(lightId, false)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightRange(instanceId, range)
+
+Set range for point/spot lights (no-op for directional lights).
+
+```lua
+Engine.setLightRange(lightId, 20.0)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.getCamera()
+
+Read the current camera position and forward vector from `InputState`.
+
+```lua
+local cam = Engine.getCamera()
+-- cam.position = { x, y, z }
+-- cam.forward = { x, y, z }
+```
+
+**Returns**: table with `position` and `forward` vec3 tables
+
+### Engine.setCamera(...)
+
+Set camera position and forward. Accepts either six numbers or a table.
+
+```lua
+Engine.setCamera(0, 1.6, 5, 0, 0, -1)
+Engine.setCamera({
+    position = { x = 0, y = 1.6, z = 5 },
+    forward = { x = 0, y = 0, z = -1 },
+})
+```
+
+Forces a one-shot camera sync on the render/player side (`forceCameraSync`). Forward is normalized; a zero-length forward is an error.
+
+**Returns**: None
+
 ## Networking
 
 ### Engine.httpRequest(options)
 
-Make an HTTPS GET request.
+Make an **async** HTTPS GET request. Synchronous HTTP is disabled; a `callback` is required.
+Script HTTP never inherits the downloader “Allow HTTP” or private-network flags; HTTPS-only and public hosts by default.
 
 ```lua
-local response = Engine.httpRequest({
+Engine.httpRequest({
     url = "https://api.example.com/data",
-    method = "GET"
+    method = "GET",
+    callback = function(response)
+        if response.success then
+            print("Status: " .. tostring(response.status))
+            print("Body: " .. tostring(response.body))
+        else
+            print("Error: " .. tostring(response.error))
+        end
+    end
 })
-
-if response.success then
-    print("Status: " .. tostring(response.status))
-    print("Body: " .. response.body)
-else
-    print("Error: " .. tostring(response.error))
-end
 ```
 
 **Parameters**: `options` (table) with:
 - `url` (string, required): HTTPS URL
 - `method` (string, optional): HTTP method (only "GET" is supported)
-- `body` (string, optional): Request body (not used for GET)
+- `callback` (function, required): Invoked with the response table when complete
 
-**Returns**: `table` with:
-- `success` (boolean): Whether request succeeded
-- `status` (number): HTTP status code
-- `body` (string): Response body
-- `elapsedSeconds` (number): Request duration
-- `error` (string, optional): Error message if failed
+**Returns**: Immediately returns a small status table (request accepted / error). The response body is delivered to `callback`.
 
 **Restrictions**:
 - Only HTTPS URLs are allowed
 - Only GET method is supported
 - Host allowlist may be enforced (if configured)
 - Response size is limited (default: 1MB)
-
-**Example**:
-```lua
-function MyScript:on_interact(actorId)
-    local response = Engine.httpRequest({
-        url = "https://api.example.com/status"
-    })
-    
-    if response.success then
-        local data = response.body
-        -- Process response data
-    else
-        print("Request failed: " .. tostring(response.error))
-    end
-end
-```
+- Concurrent in-flight requests are capped
 
 ## UI Functions
 
@@ -370,6 +457,47 @@ Engine.stopAudio("my-audio-instance")
 - `instanceId` (string, required): Audio instance ID
 
 **Returns**: `boolean` - `true` if stopped
+
+## Physics / Entity Queries
+
+### Engine.raycast(origin, direction, maxDistance)
+
+Cast a physics ray and return the first hit.
+
+**Parameters**:
+- `origin` (table): `{x, y, z}`
+- `direction` (table): `{x, y, z}` (normalized preferred)
+- `maxDistance` (number, optional)
+
+**Returns**: `table` with `hit`, `instanceId`, `distance`, `position`, `normal` (or nil fields when no hit)
+
+### Engine.sphereOverlap(center, radius)
+
+Return instance ids whose physics bodies overlap a sphere.
+
+### Engine.getEntityPosition(instanceId) / getEntityRotation / getEntityScale
+
+Read transform for a scene instance id (string). Returns a `{x,y,z}` table or nil.
+
+### Engine.spawnEntity(desc)
+
+Spawn a runtime instance. Returns the new **instance id** string, or nil.
+
+```lua
+local id = Engine.spawnEntity({
+    type = "model",           -- model | pointlight | spotlight | directionallight | audio
+    asset = "my-model-asset", -- required for model/audio
+    position = {x = 0, y = 1, z = 0},
+    rotation = {x = 0, y = 0, z = 0},
+    scale = {x = 1, y = 1, z = 1}
+})
+```
+
+### Engine.destroyEntity(instanceId)
+
+Destroy a non-critical instance by instance id.
+
+**Ownership (session-global soft ownership)**: The instance must be controllable — either the caller's script `assetId`, or an id created via `Engine.spawnEntity` in the current session (any script in the session may destroy session spawns). Calls with no script entity context may only destroy session-spawned ids. Portals, volumes, and the player are always rejected. Unauthorized calls return `false` (and log a warning); they do not throw.
 
 ## External URL Functions
 

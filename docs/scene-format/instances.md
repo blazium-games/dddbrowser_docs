@@ -116,12 +116,15 @@ Cone-shaped light.
     "direction": {"x": 0.0, "y": -1.0, "z": 0.0},
     "cutoff": 30.0,
     "outerCutoff": 45.0,
-    "range": 20.0
+    "range": 20.0,
+    "shadowEnabled": true,
+    "shadowBias": 0.005,
+    "shadowMapResolution": 2048
   }
 }
 ```
 
-**Required**: `light` property with direction, cutoff angles, and range
+**Required**: `light` property with direction, cutoff angles, and range. Optional shadow fields match directional lights (`shadowEnabled`, `shadowBias`, `shadowMapResolution`).
 
 ### Portal Instances (`type: "portal"`)
 
