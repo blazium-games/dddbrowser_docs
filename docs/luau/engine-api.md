@@ -11,7 +11,9 @@ The `Engine` API provides access to core engine functionality including input, n
 The `Engine` table is available in all scripts and provides functions for:
 
 - Input state queries
-- Entity manipulation (position, scale, rotation)
+- Entity manipulation (position, scale, rotation, visibility)
+- Light control (color, intensity, enabled, range) for session-spawned lights
+- Camera get/set
 - HTTP requests
 - UI (textboxes, modals)
 - Audio playback
@@ -165,6 +167,102 @@ function MyScript:on_update(dt)
     Engine.setEntityRotation(self.entity, 0, self.rotation, 0)
 end
 ```
+
+### Engine.setEntityVisible(entityIdOrInstanceId, visible)
+
+Show or hide a renderable entity. Same ownership rules as `setEntityPosition` (script entity id, or session-spawned / owned instance id).
+
+```lua
+Engine.setEntityVisible(self.entity, false)
+Engine.setEntityVisible("lua_spawn_1", true)
+```
+
+**Parameters**:
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
+- `visible` (boolean): Whether the entity should render
+
+**Returns**: `boolean` - `true` if the visibility change was applied
+
+### Engine.getEntityVisible(entityIdOrInstanceId)
+
+Query whether a renderable entity is visible.
+
+```lua
+local visible = Engine.getEntityVisible("lua_spawn_1")
+```
+
+**Parameters**:
+- `entityIdOrInstanceId` (number|string): Script entity id or instance id
+
+**Returns**: `boolean` or `nil` if the entity is missing / not renderable
+
+### Engine.setLightColor(instanceId, r, g, b)
+
+Set RGB color on a light entity. Intended for lights created via `Engine.spawnEntity` in the current session (session-global soft ownership).
+
+```lua
+Engine.setLightColor(lightId, 1.0, 0.5, 0.2)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightIntensity(instanceId, intensity)
+
+Set light intensity multiplier.
+
+```lua
+Engine.setLightIntensity(lightId, 2.5)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightEnabled(instanceId, enabled)
+
+Enable or disable a light without destroying it.
+
+```lua
+Engine.setLightEnabled(lightId, false)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.setLightRange(instanceId, range)
+
+Set range for point/spot lights (no-op for directional lights).
+
+```lua
+Engine.setLightRange(lightId, 20.0)
+```
+
+**Returns**: `boolean` - `true` if applied
+
+### Engine.getCamera()
+
+Read the current camera position and forward vector from `InputState`.
+
+```lua
+local cam = Engine.getCamera()
+-- cam.position = { x, y, z }
+-- cam.forward = { x, y, z }
+```
+
+**Returns**: table with `position` and `forward` vec3 tables
+
+### Engine.setCamera(...)
+
+Set camera position and forward. Accepts either six numbers or a table.
+
+```lua
+Engine.setCamera(0, 1.6, 5, 0, 0, -1)
+Engine.setCamera({
+    position = { x = 0, y = 1.6, z = 5 },
+    forward = { x = 0, y = 0, z = -1 },
+})
+```
+
+Forces a one-shot camera sync on the render/player side (`forceCameraSync`). Forward is normalized; a zero-length forward is an error.
+
+**Returns**: None
 
 ## Networking
 
