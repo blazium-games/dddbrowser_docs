@@ -177,7 +177,7 @@ Autosave volumes automatically save scene state:
 - **Purpose**: Persistent game state
 - **Trigger**: Player enters the volume
 - **Notification**: Optional on-screen notification
-- **State**: Saves gamemode and script state
+- **State** (`scene_state.json` v2): player camera pose, script/gamemode `on_save` tables, session-spawned entities (`Engine.spawnEntity`), and transforms for mutable scene instances. Not a full ECS world dump (portals, volumes, physics velocities, etc. are not serialized).
 
 See [Scene Save Examples](/docs/examples/scene-save/scene-save-autosave-default) for usage.
 
