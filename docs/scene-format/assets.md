@@ -26,6 +26,23 @@ All assets have this basic structure:
 - **`uri`** (string): URL to the asset file. Must be HTTPS.
 - **`mediaType`** (string): MIME type of the asset
 
+### Optional integrity (`sha256`)
+
+- **`sha256`** (string): Hex-encoded SHA-256 (64 hex chars) of the **exact bytes** at `uri`.
+- When present, DDDBrowser hashes the downloaded (or revalidated cache) file and **fails the scene load** on mismatch.
+- **Recommended for `type: "script"`** (`.luau`) on any public scene so a compromised origin or cache cannot swap executable code unnoticed.
+- Generate with `sha256sum file.luau` (Linux/macOS) or `Get-FileHash -Algorithm SHA256 file.luau` (PowerShell).
+
+```json
+{
+  "id": "gameplay",
+  "type": "script",
+  "uri": "https://example.com/gameplay.luau",
+  "mediaType": "application/x-luau",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}
+```
+
 ## Asset Types
 
 ### Model (`type: "model"`)
@@ -214,7 +231,7 @@ Standard web URLs (required for most assets):
 ```
 
 **Requirements**:
-- Must use HTTPS (HTTP is not supported)
+- Prefer HTTPS. Scene/asset `http://` URLs require the user to confirm **Allow HTTP** in the client; scripts’ `Engine.httpRequest` stays HTTPS-only
 - Must be publicly accessible
 - Should use proper file extensions
 

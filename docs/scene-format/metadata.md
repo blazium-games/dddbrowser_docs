@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Scene Metadata
 
-Scene metadata provides information about the scene that can be discovered before loading the full scene JSON. This enables previews, thumbnails, and scene browsing without downloading the entire scene definition.
+Scene metadata is a small subset of scene information that DDDBrowser can fetch **before** loading the full scene JSON. In the desktop client today it is used for **travel and portal confirmation previews** (title, thumbnail, rating display)—not an in-app catalog, browse library, or filterable discovery UI.
 
 ## What is Scene Metadata?
 
@@ -14,13 +14,12 @@ Scene metadata is a subset of scene information that can be embedded in HTML pag
 - Author information
 - Content rating
 - Thumbnail image
-- World information
+- World information (metadata only; one scene loads at a time)
 
 Metadata allows DDDBrowser to:
-- Show scene previews
-- Display scene information before loading
-- Organize scenes by world
-- Filter by content rating
+- Show a preview on travel / portal confirm
+- Display title / thumbnail / rating before the user commits to load
+- Carry `world.id` for portal world-id checks (not multi-scene streaming)
 
 ## Discovery Priority
 
@@ -199,18 +198,18 @@ X-Blazium-Scene: {"id":"my_scene","name":"My Scene","author":"Creator","rating":
 
 ## Best Practices
 
-- **Always provide metadata**: Makes scenes discoverable and browsable
+- **Always provide metadata**: Improves travel/portal preview before load
 - **Use script tags**: Most reliable and contains full scene definition
-- **Include thumbnails**: Visual previews help users find scenes
-- **Set appropriate ratings**: Helps users find suitable content
-- **Use world IDs**: Organize related scenes together
+- **Include thumbnails**: Shown in travel/portal preview UI
+- **Set appropriate ratings**: Displayed in preview; not a client-side filter catalog
+- **Use world IDs**: Metadata for related scenes / portal checks (not adjacency streaming)
 - **Keep metadata consistent**: Ensure metadata matches scene JSON
 
 ## Metadata vs Scene JSON
 
 Metadata and scene JSON can overlap:
 
-- **Metadata**: Quick preview, discovery, browsing
+- **Metadata**: Travel/portal preview before load
 - **Scene JSON**: Complete scene definition, required for loading
 
 If both are provided:

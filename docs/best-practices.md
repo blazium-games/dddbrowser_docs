@@ -20,7 +20,7 @@ Follow these guidelines to create high-quality scenes and scripts for DDDBrowser
 
 - **Optimize assets**: Compress textures, simplify models
 - **Use appropriate formats**: Use supported formats (OBJ/MTL, PNG/JPG/TGA, WAV, TTF)
-- **HTTPS only**: All asset URLs must use HTTPS
+- **HTTPS by default**: Serve assets over HTTPS; treat Allow HTTP as a local/dev escape hatch only
 - **Descriptive IDs**: Use clear, unique asset IDs
 - **Reuse assets**: Reference the same asset multiple times rather than duplicating
 
@@ -98,17 +98,18 @@ Follow these guidelines to create high-quality scenes and scripts for DDDBrowser
 
 ### URLs
 
-- **HTTPS only**: Always use HTTPS for all URLs
+- **Prefer HTTPS**: Default for travel and scripts; HTTP travel requires an Allow HTTP confirmation
 - **Validate URLs**: Validate URLs before using
-- **User confirmation**: Request confirmation for external URLs
+- **User confirmation**: Request confirmation for external / HTTP travel when appropriate
 - **No sensitive data**: Don't store sensitive data in scenes
+- **Script HTTP**: Keep `Engine.httpRequest` on HTTPS + allowlisted hosts (separate from travel Allow HTTP)
 
 ### Scripts
 
-- **Sandboxed execution**: Scripts run in secure sandbox
+- **Sandboxed execution**: Scripts run in a Luau sandbox (no filesystem / OS), but may call `Engine.httpRequest` under Network Policy
 - **Validate input**: Validate all user input
 - **Error handling**: Handle errors gracefully
-- **No file system access**: Scripts cannot access file system
+- **No file system access**: Scripts cannot access the file system
 
 ## Documentation
 

@@ -54,7 +54,7 @@ To run examples locally:
 
 2. **Load in DDDBrowser**:
    - URL: `http://localhost:8000/example-name.html`
-   - Note: HTTPS is required, so use a local HTTPS server or test server
+   - Note: Prefer HTTPS (or Allow HTTP in the client for plain `http://` local servers)
 
 ## Example Categories
 

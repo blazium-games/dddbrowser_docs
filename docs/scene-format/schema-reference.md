@@ -61,7 +61,7 @@ A description of the scene.
 
 #### `id` (string, optional)
 
-Unique identifier for the scene. Used for scene discovery and references.
+Unique identifier for the scene. Used for references and portal/travel metadata.
 
 ```json
 "id": "my_scene_001"
@@ -203,7 +203,8 @@ Configuration for autosave notifications.
 ```json
 "autosaveNotification": {
   "text": "Game saved!",
-  "position": {"x": 0.02, "y": 0.95},
+  "x": 0.02,
+  "y": 0.95,
   "font": "default-font",
   "color": {"x": 1.0, "y": 1.0, "z": 1.0}
 }
@@ -211,7 +212,7 @@ Configuration for autosave notifications.
 
 Properties:
 - `text` (string, optional): Notification text
-- `position` (vec2, required): Screen position (0-1 normalized)
+- `x` / `y` (number, optional): Screen position (0–1 normalized)
 - `font` (string, optional): Font asset ID
 - `color` (vec3, optional): Text color (RGB, 0-1)
 

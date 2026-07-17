@@ -8,15 +8,15 @@ DDDBrowser stores application settings that persist between sessions. This guide
 
 ## Accessing Settings
 
-To access settings:
+1. Press **Esc** (exit / pause menu)
+2. Choose **Settings**
+3. The Settings modal opens with a **General** view and a **Keybindings** view (Change Keybindings button)
 
-1. Open the menu system (keyboard shortcut or system menu)
-2. Select "Settings"
-3. The Settings modal will appear with two tabs:
-   - **General**: Audio and application preferences
-   - **Keybindings**: Input control customization
+Also reachable from the broader menu/UI where Settings is listed.
 
-## Audio Settings
+## General view (as shipped)
+
+### Audio Settings
 
 ### Audio Device Selection
 
@@ -79,8 +79,6 @@ Final Volume = Master Volume × Category Volume × Scene Volume
 For example, if Master is 0.5, SFX is 0.8, and a scene sound has volume 0.6:
 - Final = 0.5 × 0.8 × 0.6 = 0.24 (24%)
 
-## General Settings
-
 ### Quit Confirmation
 
 - **Option**: "Don't ask again" checkbox
@@ -89,32 +87,40 @@ For example, if Master is 0.5, SFX is 0.8, and a scene sound has volume 0.6:
 - **When checked**: Application quits immediately when you choose Quit
 - **When unchecked**: Shows confirmation dialog before quitting
 
+### Graphics
+
+- **Occlusion culling**: Toggle hardware/occlusion culling path
+- **Shadows**: Toggle shadow rendering
+
+### Network Policy (script HTTP)
+
+Controls **`Engine.httpRequest`** third-party hosts (not scene travel Allow HTTP):
+
+- Shows the **active scene origin host** when a scene is loaded
+- **Allow allowlisted third-party hosts**: when enabled, listed hosts may be contacted via script GET
+- **Host list**: add/remove hosts (e.g. `api.example.com`)
+
+Scene origin remains allowed for script HTTP when a scene is active. Travel/load `http://` uses a separate **Allow HTTP** prompt and does not change this policy.
+
+### Script origins (executable Luau)
+
+Controls which hosts may supply **`.luau` scripts** beyond the scene URL host:
+
+- Scripts from the **same host as the scene URL** are always allowed
+- Other hosts require an entry under **Script origins**
+- Stored as `scriptOriginsAllowlist` in `settings.json`
+
+See [Engine API — Script origin trust](/docs/luau/engine-api).
+
 ## Settings Storage
 
 Settings are stored in:
 
 **Location**: `%LOCALAPPDATA%\DDDBrowser\settings.json`
 
-**Format**: JSON file with the following structure:
+**Format**: JSON (fields evolve with the app). Typical keys include `audioDevice`, `audioVolumes`, `quitDontAsk`, `graphics`, `scriptNetworkPolicy`, and `scriptOriginsAllowlist`.
 
-```json
-{
-  "audioDevice": {
-    "deviceId": 0,
-    "deviceName": "Default Audio Device"
-  },
-  "audioVolumes": {
-    "masterVolume": 0.25,
-    "musicVolume": 1.0,
-    "sfxVolume": 1.0,
-    "voiceVolume": 1.0,
-    "uiVolume": 1.0
-  },
-  "quitDontAsk": false
-}
-```
-
-**Persistence**: Settings are saved automatically when changed.
+**Persistence**: Save applies when you click **Save** in the Settings modal (or as otherwise noted for individual controls).
 
 **Backup**: You can backup your settings by copying the JSON file.
 

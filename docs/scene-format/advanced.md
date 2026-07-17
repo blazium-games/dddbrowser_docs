@@ -113,7 +113,8 @@ Configure on-screen notifications when autosave occurs.
 ```json
 "autosaveNotification": {
   "text": "Game saved!",
-  "position": {"x": 0.02, "y": 0.95},
+  "x": 0.02,
+  "y": 0.95,
   "font": "default-font",
   "color": {"x": 1.0, "y": 1.0, "z": 1.0}
 }
@@ -121,7 +122,7 @@ Configure on-screen notifications when autosave occurs.
 
 **Properties**:
 - `text` (string, optional): Notification text
-- `position` (vec2, required): Screen position (0-1 normalized)
+- `x` / `y` (number, optional): Screen position (0–1 normalized)
   - X: 0 = left, 1 = right
   - Y: 0 = bottom, 1 = top
 - `font` (string, optional): Font asset ID

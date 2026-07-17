@@ -18,6 +18,16 @@ The `Engine` table is available in all scripts and provides functions for:
 - UI (textboxes, modals)
 - Audio playback
 
+## Script origin trust
+
+Remote `.luau` execution is gated by an **origin allowlist** (not scene signatures):
+
+- Scripts whose host matches the **active scene URL host** are allowed.
+- Scripts from other hosts are **denied** unless the operator adds that host under **Settings → Script origins** (`scriptOriginsAllowlist` in `settings.json`).
+- Inline `data:` script URIs are allowed (they come from the scene document).
+- This is separate from **Network Policy** (which only controls `Engine.httpRequest` third-party hosts).
+- Pair with per-asset `sha256` pins (scene format) and cache revalidation for integrity.
+
 ## Input Functions
 
 ### Engine.getActionState(action)
@@ -103,7 +113,7 @@ Engine.setEntityPosition("lua_spawn_1", 0, 5, 0)
 
 **ID model**: Script components use numeric `self.entity`. Scene instances and `Engine.spawnEntity` use string instance ids. `getEntity*` / `destroyEntity` take instance ids; `setEntity*` accepts either form.
 
-**Ownership**: String instance ids are subject to session-global soft ownership. With a script caller, the id must be the caller's `assetId` or a session-spawned id. Without a script caller, only session-spawned ids are accepted. Rejected updates log a warning and do nothing (they do not throw).
+**Ownership**: String instance ids use **per-caller spawn ownership**. With a script caller, the id must be the caller's own `assetId` or a spawn created by that same script entity. Without a script caller (console), only **console-owned** spawns are accepted. Cross-script mutate/destroy of another script's `spawnEntity` ids is rejected. Rejected updates log a warning and do nothing (they do not throw).
 
 **Example**:
 ```lua
@@ -200,7 +210,7 @@ local visible = Engine.getEntityVisible("lua_spawn_1")
 
 ### Engine.setLightColor(instanceId, r, g, b)
 
-Set RGB color on a light entity. Intended for lights created via `Engine.spawnEntity` in the current session (session-global soft ownership).
+Set RGB color on a light entity. Intended for lights created via `Engine.spawnEntity` by the calling script (per-caller ownership).
 
 ```lua
 Engine.setLightColor(lightId, 1.0, 0.5, 0.2)
@@ -529,7 +539,7 @@ Absent optional fields keep the current spawn defaults (white light intensity 1 
 
 Destroy a non-critical instance by instance id.
 
-**Ownership (session-global soft ownership)**: The instance must be controllable — either the caller's script `assetId`, or an id created via `Engine.spawnEntity` in the current session (any script in the session may destroy session spawns). Calls with no script entity context may only destroy session-spawned ids. Portals, volumes, and the player are always rejected. Unauthorized calls return `false` (and log a warning); they do not throw.
+**Ownership (per-caller)**: The instance must be the caller's script `assetId`, or a spawn created by that same script via `Engine.spawnEntity`. Other scripts cannot destroy or mutate your spawns. Console/`eval` with no script entity may only affect console-owned spawns. Portals, volumes, and the player are always rejected. Unauthorized calls return `false` (and log a warning); they do not throw.
 
 ## External URL Functions
 

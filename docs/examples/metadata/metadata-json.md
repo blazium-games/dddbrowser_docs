@@ -33,5 +33,5 @@ https://blazium-engine.github.io/DDDBrowserExamples/metadata-json.html
 ## Next Steps
 
 - [Metadata - Both](/docs/examples/metadata/metadata-both) - Both formats together
-- [Scene Format - Metadata](/docs/scene-format/metadata) - Metadata discovery
+- [Scene Format - Metadata](/docs/scene-format/metadata) - Travel/portal preview metadata
 

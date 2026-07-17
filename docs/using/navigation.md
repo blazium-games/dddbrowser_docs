@@ -86,9 +86,9 @@ The default keybindings are:
 
 ## Customizing Keybindings
 
-You can customize keybindings in the Settings menu:
+You can customize keybindings in Settings:
 
-1. Open Settings (from the menu system)
+1. Press **Esc** → **Settings** → **Change Keybindings**
 2. Go to the Keybindings tab
 3. Click on an action to rebind it
 4. Press the key(s) you want to use

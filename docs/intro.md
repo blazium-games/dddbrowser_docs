@@ -10,7 +10,7 @@ DDDBrowser is a 3D scene browser that allows you to explore and interact with vi
 
 DDDBrowser is a desktop application that:
 
-- **Loads 3D scenes** from HTTPS URLs
+- **Loads 3D scenes** from web URLs (HTTPS default; HTTP via Allow HTTP)
 - **Renders interactive 3D environments** with models, lights, and effects
 - **Supports scripting** with Lua/Luau for interactive behaviors
 - **Enables travel** between scenes via portals
@@ -68,7 +68,7 @@ DDDBrowser supports the following file formats:
 - **Audio**: WAV
 - **Scripts**: Luau (Lua 5.1 compatible)
 
-All assets must be served over **HTTPS** - HTTP is not supported for security reasons.
+**HTTPS is the default and recommended** for scene and asset URLs. Plain `http://` travel/load is allowed only after an explicit **Allow HTTP** confirmation in the client (user-gated escape hatch). Script `Engine.httpRequest` is separate: it remains HTTPS-only and does **not** inherit the travel Allow HTTP flag.
 
 ## Scene Discovery
 

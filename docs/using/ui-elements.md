@@ -15,7 +15,7 @@ The top bar is always visible and provides essential controls:
 - **Purpose**: Enter scene URLs to load
 - **Location**: Left side of top bar
 - **Usage**: Type a URL and press Enter or click Load
-- **Requirements**: Must be a valid HTTPS URL
+- **Requirements**: Prefer HTTPS; plain HTTP prompts for **Allow HTTP**
 
 ### Load Button
 
@@ -29,7 +29,7 @@ The top bar is always visible and provides essential controls:
 - **Purpose**: Shows loading progress
 - **Location**: Center of top bar
 - **Displays**:
-  - Scene discovery status
+  - Scene definition / load stage
   - Asset download progress
   - Processing status
 - **States**: Idle, Loading, Complete, Error
@@ -43,31 +43,25 @@ The top bar is always visible and provides essential controls:
 
 ## Settings Modal
 
-Access settings through the menu system:
+Open via **Esc → Settings** (or the menu entry for Settings). Details: [Application Settings](/docs/settings/application-settings).
 
-### General Tab
+### General view
 
-- **Audio Device**: Select audio output device
-  - Dropdown list of available devices
-  - Default device is selected automatically
-- **Volume Controls**:
-  - Master Volume: Overall volume level
-  - Music Volume: Background music volume
-  - SFX Volume: Sound effects volume
-  - Voice Volume: Voice/dialogue volume
-  - UI Volume: User interface sounds volume
-- **Quit Confirmation**: Toggle "Don't ask again" for quit confirmation
+- **Audio Device** and per-bus volume sliders
+- **Quit Confirmation**: "Don't ask again"
+- **Graphics**: Occlusion culling, Shadows
+- **Network Policy**: script HTTP third-party host allowlist
+- **Script origins**: hosts allowed to supply remote `.luau` beyond the scene origin
+- **Open Cache**, **Change Keybindings**, **Cancel**, **Save**
 
-### Keybindings Tab
+### Keybindings view
 
 - **Action List**: All available input actions
 - **Current Bindings**: Shows current key assignments
 - **Rebind**: Click an action, then press the key(s) to bind
 - **Modifiers**: Support for Shift, Ctrl, Alt
 - **Mouse Buttons**: Can bind to left/right mouse buttons
-- **Save**: Save changes to keybindings file
-
-Settings are saved automatically when changed.
+- Esc returns to the General view without closing Settings
 
 ## Travel Modal
 
@@ -124,17 +118,15 @@ The URL modal appears when:
 - Accept/Decline buttons
 - Script callback with user's choice
 
-## Menu System
+## Menu System (Esc)
 
-The menu system provides access to:
+Press **Esc** for the exit/pause menu. Typical actions:
 
-- **Settings**: Application settings and keybindings
-- **Travel**: Manual scene travel (if available)
-- **Exit**: Quit the application
+- **Settings**: Application settings (see above)
+- **Leave** / leave-instance controls (also on the top bar when in a scene)
+- **Quit**: Exit the application (respects quit confirmation preference)
 
-Access the menu via:
-- Keyboard shortcut (varies by platform)
-- System menu bar (if available)
+URL travel remains on the **top bar** URL field + Load.
 
 ## ImGui Textbox
 

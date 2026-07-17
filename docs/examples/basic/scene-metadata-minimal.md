@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Minimal Metadata Scene
 
-Demonstrates the minimum metadata required for scene discovery.
+Demonstrates the minimum metadata used for travel/portal confirmation previews.
 
 ## Overview
 
@@ -14,7 +14,7 @@ This example shows the simplest metadata configuration using HTML meta tags.
 
 - HTML meta tag format
 - Required metadata fields
-- Scene discovery
+- Travel/portal preview (not an in-app catalog)
 
 ## Try It
 

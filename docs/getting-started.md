@@ -8,11 +8,13 @@ This guide will help you get DDDBrowser up and running so you can start explorin
 
 ## Installation
 
-DDDBrowser is a desktop application. To install it:
+DDDBrowser is a **Windows** desktop application (x64). Linux/macOS are not supported for public releases.
 
-1. Download the latest release from the project repository
-2. Extract the archive to a folder of your choice
-3. Run `DDDBrowser.exe` (Windows) or the appropriate executable for your platform
+1. Download the latest Windows release (staged folder or zip) and the matching `SHA256SUMS.txt`
+2. Verify checksums, then extract/copy the `browser` payload to a folder of your choice
+3. Run `DDDBrowser.exe`
+
+Settings, cache, and logs live under `%LOCALAPPDATA%\DDDBrowser\` (telemetry, when enabled, under `%LOCALAPPDATA%\Blazium\logs\`). Default logs redact URL paths (scheme + host only).
 
 ## Running the Application
 
@@ -73,11 +75,14 @@ The top bar provides quick access to:
 
 ### Settings
 
-Access settings via the menu system:
+Press **Esc → Settings**:
 
-- **Audio Settings**: Adjust volume levels and select audio device
+- **Audio**: Volume levels and audio device
+- **Graphics**: Occlusion culling, shadows
+- **Network Policy**: Script HTTP third-party hosts
+- **Script origins**: Hosts allowed for remote `.luau`
 - **Keybindings**: Customize input controls
-- **General**: Quit confirmation preferences
+- **Quit confirmation**: Don't-ask-again preference
 
 ## Configuration
 
@@ -87,7 +92,11 @@ DDDBrowser stores settings in:
 - **Keybindings**: `%LOCALAPPDATA%\DDDBrowser\keybindings.json`
 - **Cache**: `%LOCALAPPDATA%\DDDBrowser\cache\<md5-hash>\`
 
-The cache directory stores downloaded assets to speed up subsequent loads of the same scenes.
+The cache directory stores downloaded assets to speed up subsequent loads of the same scenes. Each cached network asset has a sibling `.meta` file with `etag` / `lastModified` validators. On reuse, DDDBrowser **revalidates** with the origin (`If-None-Match` / `If-Modified-Since`): HTTP 304 keeps the file; a new 200 replaces it; a failed revalidation **fails the scene load** (fail closed — unrevalidated disk bytes are not used for scripts or other assets).
+
+### Privacy
+
+Default application logs redact `http(s)` URLs to `scheme://host/***`. Telemetry is **off by default**; when enabled, string payload fields are redacted the same way unless full-URL debug logging is explicitly enabled.
 
 ## Next Steps
 

@@ -36,7 +36,7 @@ Common issues and solutions when using DDDBrowser.
 **Symptoms**: Assets fail to download, loading hangs
 
 **Solutions**:
-- **HTTPS only**: Ensure all asset URLs use HTTPS (HTTP is not supported)
+- **HTTPS preferred**: Prefer HTTPS for scene/asset URLs. If you use `http://` and load is blocked, confirm **Allow HTTP** when prompted (travel/load only—not script HTTP)
 - **CORS**: Check CORS headers if hosting assets separately
 - **File formats**: Verify file formats are supported (OBJ/MTL, PNG/JPG/TGA, WAV, TTF)
 - **File size**: Large files may take time to download
@@ -198,7 +198,7 @@ Common issues and solutions when using DDDBrowser.
 **Symptoms**: "HTTPS required" error
 
 **Solutions**:
-- **Use HTTPS**: All URLs must use HTTPS (HTTP is not supported)
+- **Use HTTPS**: Prefer HTTPS for all scene/asset URLs; Allow HTTP is an explicit user confirmation for travel/load only
 - **SSL certificate**: Ensure server has valid SSL certificate
 - **Redirect**: Check if HTTP redirects to HTTPS
 

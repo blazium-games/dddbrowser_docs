@@ -189,11 +189,13 @@ This script:
 
 Scripts run in a secure sandbox:
 
-- **No file system access**: Cannot read/write files
-- **No network access**: Cannot make arbitrary network requests (only via Engine.httpRequest)
+- **No file system access**: Cannot read/write files (`os` / `io` / etc. banned)
+- **No arbitrary sockets**: Network is only via `Engine.httpRequest` — async **HTTPS GET**, subject to Settings **Network Policy** host allowlist and private-IP blocks (native client, not browser CORS)
 - **No OS access**: Cannot execute system commands
-- **HTTPS only**: Network requests must use HTTPS
-- **Host allowlist**: Optional host restrictions for network requests
+- **Travel Allow HTTP is separate**: Confirming Allow HTTP for scene travel does **not** enable plain HTTP for `Engine.httpRequest`
+- **Script origins**: Executable `.luau` hosts are gated separately (same-origin + Settings → Script origins)
+
+See [Engine API — HTTP](/docs/luau/engine-api) and [Application Settings](/docs/settings/application-settings).
 
 ## Error Handling
 

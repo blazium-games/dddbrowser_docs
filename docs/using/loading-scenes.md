@@ -11,20 +11,20 @@ DDDBrowser loads 3D scenes from web URLs. This guide explains how scene loading 
 The URL input field is located in the top bar of DDDBrowser. To load a scene:
 
 1. **Enter a URL** in the input field
-   - Must be a valid HTTPS URL
-   - Should point to an HTML page containing scene metadata
+   - Prefer a valid **HTTPS** URL (HTTP requires an **Allow HTTP** confirmation)
+   - Should point to an HTML page that embeds or references the scene definition
    - Example: `https://blazium-engine.github.io/DDDBrowserExamples/index.html`
 
 2. **Click Load** or press Enter
 
 3. **Wait for loading** - The progress indicator shows:
-   - Scene discovery
+   - Finding the scene definition in the page/response
    - Asset downloads
    - Scene processing
 
-## Scene Discovery Methods
+## How DDDBrowser finds the scene definition
 
-DDDBrowser discovers scene definitions using a priority order. It checks each method in sequence until it finds a valid scene:
+DDDBrowser locates scene JSON in the loaded page/response using a priority order (not an in-app catalog or browse library):
 
 ### 1. HTML `<script>` Tag (Highest Priority)
 
@@ -69,7 +69,7 @@ This is useful for server-side scene generation.
 When you load a scene, DDDBrowser:
 
 1. **Downloads the HTML page** from the URL
-2. **Discovers the scene definition** using the priority order above
+2. **Locates the scene definition** using the priority order above
 3. **Validates the scene JSON** against the schema
 4. **Downloads all assets**:
    - Models (OBJ/MTL files)
@@ -88,7 +88,7 @@ When you load a scene, DDDBrowser:
 
 The progress indicator in the top bar shows:
 
-- **Scene discovery**: Finding the scene definition
+- **Scene definition**: Finding scene JSON in the page/response
 - **Validation**: Checking scene JSON validity
 - **Asset downloads**: Downloading required files
 - **Processing**: Creating 3D objects and initializing systems
@@ -116,22 +116,22 @@ DDDBrowser caches downloaded assets to speed up subsequent loads:
 
 The cache is organized by base URL, so assets from the same domain are shared across scenes.
 
-## HTTPS Requirement
+## HTTPS default and Allow HTTP
 
-DDDBrowser **only supports HTTPS URLs** for security:
+**HTTPS is the default and recommended** for scene and asset URLs:
 
-- ✅ `https://example.com/scene.html` - Allowed
-- ❌ `http://example.com/scene.html` - Rejected
-- ❌ `file:///path/to/scene.html` - Not supported
+- ✅ `https://example.com/scene.html` — Allowed
+- ⚠️ `http://example.com/scene.html` — Allowed only after an explicit **Allow HTTP** confirmation
+- ❌ `file:///path/to/scene.html` — Not supported
 
-This ensures all assets are downloaded securely and prevents man-in-the-middle attacks.
+Script `Engine.httpRequest` does **not** inherit travel Allow HTTP; it stays HTTPS-only under Network Policy.
 
 ## Leaving a Scene
 
 To unload the current scene and return to the idle state:
 
 - Click the **Leave Instance** button in the top bar
-- Or use the menu system to navigate away
+- Or use **Esc** leave/quit controls when appropriate
 
 This will:
 - Unload all scene assets
@@ -141,15 +141,15 @@ This will:
 
 ## Best Practices
 
-- **Use HTTPS**: Always serve scenes over HTTPS
+- **Prefer HTTPS**: Serve scenes over HTTPS; use Allow HTTP only when you intentionally need plain HTTP
 - **Optimize assets**: Compress textures and models for faster loading
-- **Provide metadata**: Include scene metadata for better discovery
+- **Provide metadata**: Include scene metadata for travel/portal confirmation previews
 - **Test loading**: Verify your scene loads correctly before sharing
 - **Handle errors**: Provide fallbacks for missing assets
 
 ## Next Steps
 
 - [Scene Format](/docs/scene-format/intro) - Learn how to create scenes
-- [Scene Metadata](/docs/scene-format/metadata) - Understand metadata discovery
+- [Scene Metadata](/docs/scene-format/metadata) - Travel/portal preview metadata
 - [Troubleshooting](/docs/troubleshooting) - Fix loading issues
 
