@@ -31,7 +31,8 @@ How to get content from a DCC tool into a loadable DDDBrowser scene.
 
 - Prefer **triangulated** meshes (runtime triangulates, but export-time triangles are clearer).
 - Keep OBJ under **64 MiB**, MTL under **16 MiB**, verts under ~2M.
-- Use relative `mtllib` names that resolve next to the OBJ on the server.
+- Use relative `mtllib` names that resolve next to the OBJ on the server (cache layout preserves relative paths so `mtllib` / `map_*` siblings stay beside the mesh).
+- MTL maps **consumed** at load: `map_Kd` (albedo), `map_Ka` (ambient occlusion), `map_bump` / bump (remapped to normal when no dedicated normal map), metallic/roughness/normal/emissive when present. Unsupported params (e.g. `map_Ks`, `map_d`, `Ns`, `illum`) are ignored with warnings.
 - Colliders: set instance/asset collider fields in scene JSON when needed (see [Instances](/docs/scene-format/instances)).
 
 ## Texture tips

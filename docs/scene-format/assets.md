@@ -169,8 +169,9 @@ Audio files for sound effects and music.
 
 **Media types**: `audio/wav`, `audio/ogg` (or `application/ogg`)
 
-**Audio properties**:
-- `format` (string, required by schema): `"wav"` or `"ogg"` (must match the file)
+`mediaType` must match the file extension: `audio/ogg` / `application/ogg` require `.ogg`; `audio/wav` / `audio/x-wav` require `.wav`. Mismatches are rejected at schema validation.
+
+**Audio properties** (on the asset object, optional):
 - `ambient` (boolean, optional): Whether audio is ambient (constant volume)
 
 ### Textbox (`type: "textbox"`)

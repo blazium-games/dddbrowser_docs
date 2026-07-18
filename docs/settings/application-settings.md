@@ -89,8 +89,11 @@ For example, if Master is 0.5, SFX is 0.8, and a scene sound has volume 0.6:
 
 ### Graphics
 
-- **Occlusion culling**: Toggle hardware/occlusion culling path
+- **Occlusion culling**: Toggle hierarchical-Z (HZB) compute occlusion culling. This is **not** GL hardware occlusion queries; it is an independent GPU path from SSAO.
+- **SSAO**: Toggle screen-space ambient occlusion. Multiplies a contact-shadow factor into the G-buffer AO channel before lighting. Independent of occlusion culling / HZB.
 - **Shadows**: Toggle shadow rendering
+
+See also [Scene features — Material AO vs SSAO](/docs/using/scene-features).
 
 ### Network Policy (script HTTP)
 
