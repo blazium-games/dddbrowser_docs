@@ -57,7 +57,9 @@ DDDBrowser supports two types of scripts:
 
 ## Script Structure
 
-All scripts must return a table (object) with lifecycle methods:
+All scripts must return a table (object) with lifecycle methods.
+
+### Classic DDD lifecycle
 
 ```lua
 local MyScript = {}
@@ -75,11 +77,35 @@ end
 return MyScript
 ```
 
+### Blazium gdclass compatibility (passthrough)
+
+Scripts authored for Blazium Luau `gdclass` / hybrid classes can run with little or no rewrite. After load, if the returned table uses `_ready` / `_process` (or `extends` / `__gdclass`) and does **not** define classic `on_start` / `on_update`, DDDBrowser uses the gdclass adapter:
+
+```luau
+local M = gdclass("MyBehavior", "Node3D")
+
+function M:_ready()
+    -- called once after attach (like on_start)
+end
+
+function M:_process(dt)
+    -- called every frame (like on_update)
+    self.position = { x = 0, y = self.position.y + dt, z = 0 }
+end
+
+return M
+```
+
+**Supported facade on `self` (entity scripts):** `entity`, `asset_id`, `data`, `position` / `global_position`, `rotation` / `global_rotation`, `scale`, `visible`, `queue_free()`.
+
+**Stubbed / unsupported:** `get_node`, `get_tree`, `emit_signal`, `wait` / `await` / `wait_signal`, ClassDB userdata, `Node.new()`, `require(res://…)`, full signal graph. Globals `gdclass`, `class`, `export`, and `signal` exist as no-op/load-time helpers so Blazium scripts do not error at parse time.
+
 **Key points**:
 - Script must return a table
 - Use `self` for instance variables
 - Methods use colon syntax (`:`)
 - Lifecycle methods are optional
+- Prefer classic `on_*` **or** gdclass `_ready`/`_process` — if both classic methods exist, classic wins
 
 ## Environment Variables
 
